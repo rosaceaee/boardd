@@ -1,27 +1,53 @@
-import React, { useState, useEffect, useReducer } from "react";
+import React, { useState, useEffect, useReducer, useMemo } from "react";
 import { SearchOutlined } from "@ant-design/icons";
-import { Table, Input, Button, Modal, Space, Layout } from "antd";
+import { Table, Input, Button, Modal, Space } from "antd";
+import { Bar } from "react-chartjs-2";
+import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from "chart.js";
+
+ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
 const initialState = [];
 
-function reducer(state, action) {
+const reducer = (state, action) => {
   switch (action.type) {
     case "add":
       return [...state, action.payload];
     case "delete":
       return state.filter((_, idx) => idx !== action.index);
-    case "arrange":
-      return action.payload;
     default:
       return state;
   }
-}
+};
+
+// 차트 데이터
+const generateChartData = (columns, dataSource, labelKey) => {
+  const labels = dataSource.map((item) => item[labelKey]);
+
+  const datasets = columns
+    .filter((col) => col.dataIndex !== labelKey)
+    .map((col) => ({
+      label: col.title,
+      data: dataSource.map((item) => item[col.dataIndex]),
+      backgroundColor: `rgba(${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, ${Math.floor(
+        Math.random() * 255
+      )}, 0.5)`,
+      borderColor: "rgba(0, 0, 0, 0.1)",
+      borderWidth: 1,
+    }));
+
+  return { labels, datasets };
+};
+
+const columns = [
+  { title: "범례", dataIndex: "title", key: "title" },
+  { title: "하나", dataIndex: "fir", key: "fir", sorter: (a, b) => a.fir - b.fir },
+  { title: "둘", dataIndex: "scnd", key: "scnd", sorter: (a, b) => a.scnd - b.scnd },
+];
 
 const ExAntd = () => {
   const [chkDeleteModal, setChkDeleteModal] = useState(false);
   const [selectedRow, setSelectedRow] = useState(null);
   const [searchKeyword, setSearchKeyword] = useState("");
-
   const [cellData, dispatch] = useReducer(reducer, initialState);
   const [filteredData, setFilteredData] = useState([]);
 
@@ -57,6 +83,8 @@ const ExAntd = () => {
         },
       });
       setInput({ title: "", fir: "", scnd: "" });
+    } else {
+      alert("값을 모두 입력해주세요.");
     }
   };
 
@@ -94,25 +122,8 @@ const ExAntd = () => {
     setFilteredData(filtered);
   };
 
-  const columns = [
-    {
-      title: "범례",
-      dataIndex: "title",
-      key: "title",
-    },
-    {
-      title: "하나",
-      dataIndex: "fir",
-      key: "fir",
-      sorter: (a, b) => a.fir - b.fir,
-    },
-    {
-      title: "둘",
-      dataIndex: "scnd",
-      key: "scnd",
-      sorter: (a, b) => a.scnd - b.scnd,
-    },
-  ];
+  // 차트 데이터 생성 labelKey-> "title"
+  const chartData = useMemo(() => generateChartData(columns, filteredData, "title"), [filteredData]);
 
   return (
     <section style={{ padding: "20px" }}>
@@ -165,9 +176,13 @@ const ExAntd = () => {
         cancelText="취소"
       >
         <p>
+          이 항목을 삭제할까요?
+          <br />
           {selectedRow?.title}, {selectedRow?.fir}, {selectedRow?.scnd}
         </p>
       </Modal>
+
+      <Bar data={chartData} />
     </section>
   );
 };
