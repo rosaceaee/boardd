@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useReducer, useMemo } from "react";
-import { SearchOutlined } from "@ant-design/icons";
-import { Table, Input, Button, Modal, Space } from "antd";
+
+import { SearchOutlined, InfoCircleTwoTone } from "@ant-design/icons";
+import { Layout, Row, Col, Menu, Table, Input, Button, Modal, Space, Dropdown, Flex } from "antd";
+
 import { Bar } from "react-chartjs-2";
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from "chart.js";
 
@@ -122,68 +124,112 @@ const ExAntd = () => {
     setFilteredData(filtered);
   };
 
+  const { Sider, Header, Content, Footer } = Layout;
+
   // 차트 데이터 생성 labelKey-> "title"
   const chartData = useMemo(() => generateChartData(columns, filteredData, "title"), [filteredData]);
 
+  // 메뉴 리스트
+  const items = [
+    { key: "1", label: "summary" },
+    { key: "2", label: "opt2" },
+    {
+      key: "3",
+      label: (
+        <a href="" target="self" rel="noopener noreferrer">
+          opr3
+        </a>
+      ),
+    },
+  ];
   return (
-    <section style={{ padding: "20px" }}>
-      <legend>입력:</legend>
-      <Space direction="horizontal" style={{ marginBottom: "20px" }}>
-        <Input placeholder="범례" name="title" value={input.title} onChange={handleChange} style={{ width: 120 }} />
-        <Input
-          placeholder="cell1"
-          name="fir"
-          type="number"
-          value={input.fir}
-          onChange={handleChange}
-          style={{ width: 100 }}
-        />
-        <Input
-          placeholder="cell2"
-          name="scnd"
-          type="number"
-          value={input.scnd}
-          onChange={handleChange}
-          style={{ width: 100 }}
-        />
-        <Button type="primary" onClick={addRow}>
-          추가
-        </Button>
-      </Space>
+    <Layout>
+      <Sider width={200}>
+        <Menu items={items} mode="inline" theme="dark" onClick={(a) => a} />
+      </Sider>
+      <Content>
+        <Dropdown menu={{ items }} trigger={["click"]}>
+          <a onClick={(e) => e.preventDefault()}>
+            <InfoCircleTwoTone style={{ fontSize: "1.4rem", position: "fixed", right: "1rem", margin: "1rem" }} />
+          </a>
+        </Dropdown>
+        <section style={{ padding: "20px" }}>
+          <Flex style={{ flexDirection: "column" }}>
+            <Col span={12}>
+              <Space direction="horizontal" style={{ marginBottom: "20px" }}>
+                <Input
+                  placeholder="범례"
+                  name="title"
+                  value={input.title}
+                  onChange={handleChange}
+                  style={{ width: 120 }}
+                />
+                <Input
+                  placeholder="cell1"
+                  name="fir"
+                  type="number"
+                  value={input.fir}
+                  onChange={handleChange}
+                  style={{ width: 100 }}
+                />
+                <Input
+                  placeholder="cell2"
+                  name="scnd"
+                  type="number"
+                  value={input.scnd}
+                  onChange={handleChange}
+                  style={{ width: 100 }}
+                />
+                <Button type="primary" onClick={addRow}>
+                  추가
+                </Button>
+              </Space>
 
-      <Space style={{ marginBottom: "20px", padding: "20px" }}>
-        <div style={{ display: "flex", marginLeft: "auto" }}>
-          <Input placeholder="찾을 데이터 입력" type="text" onChange={(e) => setSearchKeyword(e.target.value)} />
-          <Button type="primary" shape="circle" icon={<SearchOutlined />} onClick={searchData} />
-        </div>
-      </Space>
+              <Space style={{ marginBottom: "20px", padding: "20px" }}>
+                <div style={{ display: "flex", marginLeft: "auto" }}>
+                  <Input
+                    placeholder="찾을 데이터 입력"
+                    type="text"
+                    onChange={(e) => setSearchKeyword(e.target.value)}
+                  />
+                  <Button type="primary" shape="circle" icon={<SearchOutlined />} onClick={searchData} />
+                </div>
+              </Space>
+            </Col>
 
-      <Table
-        columns={columns}
-        dataSource={filteredData.map((item, idx) => ({ ...item, key: idx }))}
-        onRow={(record, rowIndex) => ({
-          onClick: () => deleteRow(rowIndex),
-        })}
-        pagination={true}
-      />
+            <Col span={12} style={{ marginTop: "1rem" }}>
+              <Table
+                columns={columns}
+                dataSource={filteredData.map((item, idx) => ({ ...item, key: idx }))}
+                onRow={(record, rowIndex) => ({
+                  onClick: () => deleteRow(rowIndex),
+                })}
+                pagination={true}
+              />
+            </Col>
 
-      <Modal
-        title="삭제 확인"
-        open={chkDeleteModal}
-        onOk={confirmDelete}
-        onCancel={cancelDelete}
-        okText="삭제"
-        cancelText="취소"
-      >
-        <p>
-          이 항목을 삭제할까요?
-          <br />
-          {selectedRow?.title}, {selectedRow?.fir}, {selectedRow?.scnd}
-        </p>
-      </Modal>
+            <Col span={12}>
+              <Bar data={chartData} />
+            </Col>
+          </Flex>
 
-      <Bar data={chartData} />
-    </section>
+          <Modal
+            title="삭제 확인"
+            open={chkDeleteModal}
+            onOk={confirmDelete}
+            onCancel={cancelDelete}
+            okText="삭제"
+            cancelText="취소"
+          >
+            <p>
+              이 항목을 삭제할까요?
+              <br />
+              {selectedRow?.title}, {selectedRow?.fir}, {selectedRow?.scnd}
+            </p>
+          </Modal>
+        </section>
+      </Content>
+    </Layout>
   );
 };
 
