@@ -1,7 +1,9 @@
 import React, { useState, useEffect, useReducer, useMemo } from "react";
 
 import { SearchOutlined, InfoCircleTwoTone } from "@ant-design/icons";
-import { Layout, Row, Col, Menu, Table, Input, Button, Modal, Space, Dropdown, Flex } from "antd";
+import { Layout, Row, Col, Menu, Table, Input, Button, Modal, Space, Dropdown, Flex, Tabs } from "antd";
+
+import { useNavigate } from "react-router-dom";
 
 import { Bar } from "react-chartjs-2";
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from "chart.js";
@@ -52,6 +54,7 @@ const ExAntd = () => {
   const [searchKeyword, setSearchKeyword] = useState("");
   const [cellData, dispatch] = useReducer(reducer, initialState);
   const [filteredData, setFilteredData] = useState([]);
+  const [tabPosition, setTabPosition] = useState("left");
 
   const [input, setInput] = useState({
     title: "",
@@ -132,9 +135,13 @@ const ExAntd = () => {
   // 메뉴 리스트
   const items = [
     { key: "1", label: "summary" },
-    { key: "2", label: "opt2" },
     {
-      key: "3",
+      key: "/stress",
+
+      label: "ManageStress",
+    },
+    {
+      key: "/settings",
       label: (
         <a href="" target="self" rel="noopener noreferrer">
           opr3
@@ -142,77 +149,182 @@ const ExAntd = () => {
       ),
     },
   ];
+
+  const SidebarMenu = ({ collapsed, setCollapsed }) => {
+    const navigate = useNavigate();
+
+    const items = [
+      { key: "/", label: "summary" },
+      { key: "/stress", label: "ManageStredss" },
+      {
+        key: "",
+        label: "asdf",
+        children: Array.from({ length: 3 }).map((_, j) => {
+          const subKey = 3;
+          return {
+            key: subKey,
+            label: `option${subKey}`,
+          };
+        }),
+      },
+    ];
+
+    const handleMenuClick = (e) => {
+      navigate(e.key);
+    };
+
+    return (
+      <Sider width={200}>
+        <Menu items={items} mode="inline" theme="dark" onClick={handleMenuClick} />
+      </Sider>
+    );
+  };
+
+  const changeTabPosition = (e) => {
+    setTabPosition(e.target.value);
+  };
+  const items2 = [
+    { key: "/settings", label: "basic setting" },
+    { key: "/sub12", label: "sub12" },
+    {
+      key: "",
+      label: "sub3",
+    },
+  ];
+
   return (
     <Layout>
-      <Sider width={200}>
+      {/* <Sider width={200} trigger={null} collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
         <Menu items={items} mode="inline" theme="dark" onClick={(a) => a} />
-      </Sider>
+      </Sider>       */}
+      <SidebarMenu />
+      <Tabs
+        tabPosition={tabPosition}
+        items={Array.from({ length: 3 }).map((_, i) => {
+          const id = String(i + 1);
+          return {
+            label: `Tab ${id}`,
+            key: id,
+            children: `Content of Tab ${id}`,
+          };
+        })}
+      />
       <Content>
         <Dropdown menu={{ items }} trigger={["click"]}>
           <a onClick={(e) => e.preventDefault()}>
             <InfoCircleTwoTone style={{ fontSize: "1.4rem", position: "fixed", right: "1rem", margin: "1rem" }} />
           </a>
         </Dropdown>
-        <section style={{ padding: "20px" }}>
-          <Flex style={{ flexDirection: "column" }}>
-            <Col span={12}>
-              <Space direction="horizontal" style={{ marginBottom: "20px" }}>
-                <Input
-                  placeholder="범례"
-                  name="title"
-                  value={input.title}
-                  onChange={handleChange}
-                  style={{ width: 120 }}
-                />
-                <Input
-                  placeholder="cell1"
-                  name="fir"
-                  type="number"
-                  value={input.fir}
-                  onChange={handleChange}
-                  style={{ width: 100 }}
-                />
-                <Input
-                  placeholder="cell2"
-                  name="scnd"
-                  type="number"
-                  value={input.scnd}
-                  onChange={handleChange}
-                  style={{ width: 100 }}
-                />
-                <Button type="primary" onClick={addRow}>
-                  추가
-                </Button>
-              </Space>
+        <section style={{ minHeight: "100vh" }}>
+          <Row className="wrapp">
+            <Col size={12} style={{ border: "2px solid red" }}>
+              <Flex style={{ flexDirection: "column" }}>
+                <Col>
+                  <Space direction="horizontal" style={{ marginBottom: "20px" }}>
+                    <Input
+                      placeholder="범례"
+                      name="title"
+                      value={input.title}
+                      onChange={handleChange}
+                      style={{ width: 120 }}
+                    />
+                    <Input
+                      placeholder="cell1"
+                      name="fir"
+                      type="number"
+                      value={input.fir}
+                      onChange={handleChange}
+                      style={{ width: 100 }}
+                    />
+                    <Input
+                      placeholder="cell2"
+                      name="scnd"
+                      type="number"
+                      value={input.scnd}
+                      onChange={handleChange}
+                      style={{ width: 100 }}
+                    />
+                    <Button type="primary" onClick={addRow}>
+                      추가
+                    </Button>
+                  </Space>
 
-              <Space style={{ marginBottom: "20px", padding: "20px" }}>
-                <div style={{ display: "flex", marginLeft: "auto" }}>
-                  <Input
-                    placeholder="찾을 데이터 입력"
-                    type="text"
-                    onChange={(e) => setSearchKeyword(e.target.value)}
+                  <Space style={{ marginBottom: "20px", padding: "20px" }}>
+                    <div style={{ display: "flex", marginLeft: "auto" }}>
+                      <Input
+                        placeholder="찾을 데이터 입력"
+                        type="text"
+                        onChange={(e) => setSearchKeyword(e.target.value)}
+                      />
+                      <Button type="primary" shape="circle" icon={<SearchOutlined />} onClick={searchData} />
+                    </div>
+                  </Space>
+                </Col>
+
+                <Col style={{ marginTop: "1rem" }}>
+                  <Table
+                    columns={columns}
+                    dataSource={filteredData.map((item, idx) => ({ ...item, key: idx }))}
+                    onRow={(record, rowIndex) => ({
+                      onClick: () => deleteRow(rowIndex),
+                    })}
+                    pagination={true}
                   />
-                  <Button type="primary" shape="circle" icon={<SearchOutlined />} onClick={searchData} />
-                </div>
-              </Space>
-            </Col>
+                </Col>
 
-            <Col span={12} style={{ marginTop: "1rem" }}>
-              <Table
-                columns={columns}
-                dataSource={filteredData.map((item, idx) => ({ ...item, key: idx }))}
-                onRow={(record, rowIndex) => ({
-                  onClick: () => deleteRow(rowIndex),
-                })}
-                pagination={true}
-              />
+                <Col>
+                  <Bar data={chartData} />
+                </Col>
+              </Flex>
             </Col>
+            <Col size={12} style={{ border: "2px solid red" }}>
+              <div></div>
 
-            <Col span={12}>
-              <Bar data={chartData} />
+              <Flex style={{ flexDirection: "column" }}>
+                <Col>
+                  <Space direction="horizontal" style={{ marginBottom: "20px" }}>
+                    <Input
+                      placeholder="범례"
+                      name="title"
+                      value={input.title}
+                      onChange={handleChange}
+                      style={{ width: 120 }}
+                    />
+                    <Input
+                      placeholder="cell1"
+                      name="fir"
+                      type="number"
+                      value={input.fir}
+                      onChange={handleChange}
+                      style={{ width: 100 }}
+                    />
+                    <Input
+                      placeholder="cell2"
+                      name="scnd"
+                      type="number"
+                      value={input.scnd}
+                      onChange={handleChange}
+                      style={{ width: 100 }}
+                    />
+                    <Button type="primary" onClick={addRow}>
+                      추가
+                    </Button>
+                  </Space>
+
+                  <Space style={{ marginBottom: "20px", padding: "20px" }}>
+                    <div style={{ display: "flex", marginLeft: "auto" }}>
+                      <Input
+                        placeholder="찾을 데이터 입력"
+                        type="text"
+                        onChange={(e) => setSearchKeyword(e.target.value)}
+                      />
+                      <Button type="primary" shape="circle" icon={<SearchOutlined />} onClick={searchData} />
+                    </div>
+                  </Space>
+                </Col>
+              </Flex>
             </Col>
-          </Flex>
-
+          </Row>
           <Modal
             title="삭제 확인"
             open={chkDeleteModal}
