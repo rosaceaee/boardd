@@ -1,5 +1,8 @@
 import React, { useState, useEffect, useReducer, useMemo } from "react";
 
+import Part from "./compo/Part";
+import Part2 from "./compo/Part2";
+
 import { SearchOutlined, InfoCircleTwoTone } from "@ant-design/icons";
 import { Layout, Row, Col, Menu, Table, Input, Button, Modal, Space, Dropdown, Flex, Tabs } from "antd";
 
@@ -134,6 +137,7 @@ const ExAntd = () => {
 
   // 메뉴 리스트
   const items = [
+    { key: "0", label: "test" },
     { key: "1", label: "summary" },
     {
       key: "/stress",
@@ -184,13 +188,29 @@ const ExAntd = () => {
     setTabPosition(e.target.value);
   };
   const items2 = [
-    { key: "/settings", label: "basic setting" },
-    { key: "/sub12", label: "sub12" },
-    {
-      key: "",
-      label: "sub3",
-    },
+    { key: "/part", label: "part" },
+    { key: "/part2", label: "part2" },
   ];
+
+  const tabItems = items2.map((item) => {
+    let Component;
+    switch (item.key) {
+      case "/part":
+        Component = <Part />;
+        break;
+      case "/part2":
+        Component = <Part2 />;
+        break;
+      default:
+        Component = <div>Not Found</div>;
+    }
+
+    return {
+      key: item.key,
+      label: item.label,
+      children: Component,
+    };
+  });
 
   return (
     <Layout>
@@ -200,14 +220,15 @@ const ExAntd = () => {
       <SidebarMenu />
       <Tabs
         tabPosition={tabPosition}
-        items={Array.from({ length: 3 }).map((_, i) => {
-          const id = String(i + 1);
-          return {
-            label: `Tab ${id}`,
-            key: id,
-            children: `Content of Tab ${id}`,
-          };
-        })}
+        // items={Array.from({ length: 3 }).map((_, i) => {
+        //   const id = String(i + 1);
+        //   return {
+        //     label: `Tab ${id}`,
+        //     key: id,
+        //     children: `Content of Tab ${id}`,
+        //   };
+        // })}
+        items={tabItems}
       />
       <Content>
         <Dropdown menu={{ items }} trigger={["click"]}>
@@ -222,7 +243,7 @@ const ExAntd = () => {
                 <Col>
                   <Space direction="horizontal" style={{ marginBottom: "20px" }}>
                     <Input
-                      placeholder="범례"
+                      placeholder="orig"
                       name="title"
                       value={input.title}
                       onChange={handleChange}
