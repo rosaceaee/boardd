@@ -1,6 +1,7 @@
 import logo from "./logo.svg";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./App.css";
+import "./custom.scss";
 import ExAntd from "./ExAntd";
 import Example from "./Example";
 import Settings from "./list/Settings";

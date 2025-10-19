@@ -1,17 +1,46 @@
 import React, { useState, useEffect, useReducer, useMemo } from "react";
 
+import Box from "./compo/Box.tsx";
 import Part from "./compo/Part";
 import Part2 from "./compo/Part2";
 
 import { SearchOutlined, InfoCircleTwoTone } from "@ant-design/icons";
-import { Layout, Row, Col, Menu, Table, Input, Button, Modal, Space, Dropdown, Flex, Tabs } from "antd";
+import {
+  Layout,
+  Row,
+  Col,
+  Menu,
+  Table,
+  Input,
+  Button,
+  Modal,
+  Space,
+  Dropdown,
+  Flex,
+  Tabs,
+} from "antd";
 
 import { useNavigate } from "react-router-dom";
 
 import { Bar } from "react-chartjs-2";
-import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from "chart.js";
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+} from "chart.js";
 
-ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend
+);
 
 const initialState = [];
 
@@ -35,9 +64,9 @@ const generateChartData = (columns, dataSource, labelKey) => {
     .map((col) => ({
       label: col.title,
       data: dataSource.map((item) => item[col.dataIndex]),
-      backgroundColor: `rgba(${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, ${Math.floor(
+      backgroundColor: `rgba(${Math.floor(Math.random() * 255)}, ${Math.floor(
         Math.random() * 255
-      )}, 0.5)`,
+      )}, ${Math.floor(Math.random() * 255)}, 0.5)`,
       borderColor: "rgba(0, 0, 0, 0.1)",
       borderWidth: 1,
     }));
@@ -47,8 +76,18 @@ const generateChartData = (columns, dataSource, labelKey) => {
 
 const columns = [
   { title: "범례", dataIndex: "title", key: "title" },
-  { title: "하나", dataIndex: "fir", key: "fir", sorter: (a, b) => a.fir - b.fir },
-  { title: "둘", dataIndex: "scnd", key: "scnd", sorter: (a, b) => a.scnd - b.scnd },
+  {
+    title: "하나",
+    dataIndex: "fir",
+    key: "fir",
+    sorter: (a, b) => a.fir - b.fir,
+  },
+  {
+    title: "둘",
+    dataIndex: "scnd",
+    key: "scnd",
+    sorter: (a, b) => a.scnd - b.scnd,
+  },
 ];
 
 const ExAntd = () => {
@@ -133,7 +172,10 @@ const ExAntd = () => {
   const { Sider, Header, Content, Footer } = Layout;
 
   // 차트 데이터 생성 labelKey-> "title"
-  const chartData = useMemo(() => generateChartData(columns, filteredData, "title"), [filteredData]);
+  const chartData = useMemo(
+    () => generateChartData(columns, filteredData, "title"),
+    [filteredData]
+  );
 
   // 메뉴 리스트
   const items = [
@@ -179,7 +221,12 @@ const ExAntd = () => {
 
     return (
       <Sider width={200}>
-        <Menu items={items} mode="inline" theme="dark" onClick={handleMenuClick} />
+        <Menu
+          items={items}
+          mode="inline"
+          theme="dark"
+          onClick={handleMenuClick}
+        />
       </Sider>
     );
   };
@@ -233,7 +280,14 @@ const ExAntd = () => {
       <Content>
         <Dropdown menu={{ items }} trigger={["click"]}>
           <a onClick={(e) => e.preventDefault()}>
-            <InfoCircleTwoTone style={{ fontSize: "1.4rem", position: "fixed", right: "1rem", margin: "1rem" }} />
+            <InfoCircleTwoTone
+              style={{
+                fontSize: "1.4rem",
+                position: "fixed",
+                right: "1rem",
+                margin: "1rem",
+              }}
+            />
           </a>
         </Dropdown>
         <section style={{ minHeight: "100vh" }}>
@@ -241,7 +295,10 @@ const ExAntd = () => {
             <Col size={12} style={{ border: "2px solid red" }}>
               <Flex style={{ flexDirection: "column" }}>
                 <Col>
-                  <Space direction="horizontal" style={{ marginBottom: "20px" }}>
+                  <Space
+                    direction="horizontal"
+                    style={{ marginBottom: "20px" }}
+                  >
                     <Input
                       placeholder="orig"
                       name="title"
@@ -277,15 +334,30 @@ const ExAntd = () => {
                         type="text"
                         onChange={(e) => setSearchKeyword(e.target.value)}
                       />
-                      <Button type="primary" shape="circle" icon={<SearchOutlined />} onClick={searchData} />
+                      <Button
+                        type="primary"
+                        shape="circle"
+                        icon={<SearchOutlined />}
+                        onClick={searchData}
+                      />
                     </div>
+                    <Box
+                      radius={50}
+                      background="orange"
+                      style={{ width: "40px" }}
+                    >
+                      test
+                    </Box>
                   </Space>
                 </Col>
 
                 <Col style={{ marginTop: "1rem" }}>
                   <Table
                     columns={columns}
-                    dataSource={filteredData.map((item, idx) => ({ ...item, key: idx }))}
+                    dataSource={filteredData.map((item, idx) => ({
+                      ...item,
+                      key: idx,
+                    }))}
                     onRow={(record, rowIndex) => ({
                       onClick: () => deleteRow(rowIndex),
                     })}
@@ -303,7 +375,10 @@ const ExAntd = () => {
 
               <Flex style={{ flexDirection: "column" }}>
                 <Col>
-                  <Space direction="horizontal" style={{ marginBottom: "20px" }}>
+                  <Space
+                    direction="horizontal"
+                    style={{ marginBottom: "20px" }}
+                  >
                     <Input
                       placeholder="범례"
                       name="title"
@@ -339,7 +414,12 @@ const ExAntd = () => {
                         type="text"
                         onChange={(e) => setSearchKeyword(e.target.value)}
                       />
-                      <Button type="primary" shape="circle" icon={<SearchOutlined />} onClick={searchData} />
+                      <Button
+                        type="primary"
+                        shape="circle"
+                        icon={<SearchOutlined />}
+                        onClick={searchData}
+                      />
                     </div>
                   </Space>
                 </Col>
