@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useReducer, useMemo } from "react";
 
-import Box from "./compo/Box.tsx";
-import Part from "./compo/Part";
-import Part2 from "./compo/Part2";
+import RequestStock from "./compo/RequestStock";
+import RequestStock2 from "./compo/RequestStock2";
 
 import { SearchOutlined, InfoCircleTwoTone } from "@ant-design/icons";
 import {
@@ -243,10 +242,10 @@ const ExAntd = () => {
     let Component;
     switch (item.key) {
       case "/part":
-        Component = <Part />;
+        Component = <RequestStock />;
         break;
       case "/part2":
-        Component = <Part2 />;
+        Component = <RequestStock2 />;
         break;
       default:
         Component = <div>Not Found</div>;
@@ -341,13 +340,6 @@ const ExAntd = () => {
                         onClick={searchData}
                       />
                     </div>
-                    <Box
-                      radius={50}
-                      background="orange"
-                      style={{ width: "40px" }}
-                    >
-                      test
-                    </Box>
                   </Space>
                 </Col>
 

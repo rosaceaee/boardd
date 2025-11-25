@@ -1,9 +1,8 @@
 import React, { useState, useEffect, useReducer, useMemo } from "react";
 
-import RequestStock from "../compo/RequestStock";
-import StockManage from "../list/StockManage";
-import ListStock from "../list/ListStock";
-
+import ReportSell from "../sell/ReportSell";
+import ManageMarketing from "../sell/ManageMarketing";
+import ManageShipping from "../sell/ManageShipping";
 import { SearchOutlined, InfoCircleTwoTone } from "@ant-design/icons";
 import {
   Layout,
@@ -90,7 +89,7 @@ const columns = [
   },
 ];
 
-const ExAntd = () => {
+const SellManage = () => {
   const [chkDeleteModal, setChkDeleteModal] = useState(false);
   const [selectedRow, setSelectedRow] = useState(null);
   const [searchKeyword, setSearchKeyword] = useState("");
@@ -177,43 +176,27 @@ const ExAntd = () => {
     [filteredData]
   );
 
-  const items = [
-    { key: "1", label: "summary" },
-    {
-      key: "/stress",
-
-      label: "ManageStress",
-    },
-    {
-      key: "/settings",
-      label: (
-        <a href="" target="self" rel="noopener noreferrer">
-          opr3
-        </a>
-      ),
-    },
-  ];
-
   const changeTabPosition = (e) => {
     setTabPosition(e.target.value);
   };
   const items2 = [
-    { key: "/requestStock", label: "입/출고 등록" },
-    { key: "/listStock", label: "재고 현황 조회" },
-    { key: "/stockManage", label: "재고 분석" },
+    { key: "/ReportSell", label: "매출 현황 분석" },
+    { key: "/ManageShipping", label: "주문/배송 관리" },
+    // { key: "/ManageShipping", label: "상품 성과 분석" },
+    { key: "/sub12", label: "광고/마케팅 성과" },
   ];
 
   const tabItems = items2.map((item) => {
     let Component;
     switch (item.key) {
-      case "/requestStock":
-        Component = <RequestStock />;
+      case "/ReportSell":
+        Component = <ReportSell />;
         break;
-      case "/listStock":
-        Component = <ListStock />;
+      case "/ManageMarketing":
+        Component = <ManageShipping />;
         break;
-      case "/stockManage":
-        Component = <StockManage />;
+      case "/ManageShipping":
+        Component = <ManageShipping />;
         break;
       default:
         Component = <div>404</div>;
@@ -231,7 +214,6 @@ const ExAntd = () => {
       {/* <Sider width={200} trigger={null} collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
         <Menu items={items} mode="inline" theme="dark" onClick={(a) => a} />
       </Sider>       */}
-      {/* <SidebarMenu /> */}
       <Tabs
         tabPosition={tabPosition}
         // items={Array.from({ length: 3 }).map((_, i) => {
@@ -244,22 +226,9 @@ const ExAntd = () => {
         // })}
         items={tabItems}
       />
-      <Content>
-        <Dropdown menu={{ items }} trigger={["click"]}>
-          <a onClick={(e) => e.preventDefault()}>
-            <InfoCircleTwoTone
-              style={{
-                fontSize: "1.4rem",
-                position: "fixed",
-                right: "1rem",
-                margin: "1rem",
-              }}
-            />
-          </a>
-        </Dropdown>
-      </Content>
+      <Content>셀매니지</Content>
     </Layout>
   );
 };
 
-export default ExAntd;
+export default SellManage;

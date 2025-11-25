@@ -1,8 +1,6 @@
 import React, { useState, useEffect, useReducer, useMemo } from "react";
-
+import Box from "../compo/Box.tsx";
 import RequestStock from "../compo/RequestStock";
-import StockManage from "../list/StockManage";
-import ListStock from "../list/ListStock";
 
 import { SearchOutlined, InfoCircleTwoTone } from "@ant-design/icons";
 import {
@@ -20,7 +18,7 @@ import {
   Tabs,
 } from "antd";
 
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Outlet } from "react-router-dom";
 
 import { Bar } from "react-chartjs-2";
 import {
@@ -90,7 +88,7 @@ const columns = [
   },
 ];
 
-const ExAntd = () => {
+const FixedLayout2 = () => {
   const [chkDeleteModal, setChkDeleteModal] = useState(false);
   const [selectedRow, setSelectedRow] = useState(null);
   const [searchKeyword, setSearchKeyword] = useState("");
@@ -177,6 +175,7 @@ const ExAntd = () => {
     [filteredData]
   );
 
+  // 메뉴 리스트
   const items = [
     { key: "1", label: "summary" },
     {
@@ -194,57 +193,57 @@ const ExAntd = () => {
     },
   ];
 
+  const SidebarMenu = ({ collapsed, setCollapsed }) => {
+    const navigate = useNavigate();
+
+    const items = [
+      { key: "/", label: "summary" },
+      { key: "/stress", label: "ManageStredss" },
+      { key: "/sellManage", label: "매출관리" },
+      {
+        key: "",
+        label: "asdf",
+        children: Array.from({ length: 3 }).map((_, j) => {
+          const subKey = 3;
+          return {
+            key: subKey,
+            label: `option${subKey}`,
+          };
+        }),
+      },
+    ];
+
+    const handleMenuClick = (e) => {
+      navigate(e.key);
+    };
+
+    return (
+      <Sider width={300} className="left-side">
+        <Menu
+          items={items}
+          mode="inline"
+          theme="dark"
+          onClick={handleMenuClick}
+        />
+      </Sider>
+    );
+  };
+
   const changeTabPosition = (e) => {
     setTabPosition(e.target.value);
   };
-  const items2 = [
-    { key: "/requestStock", label: "입/출고 등록" },
-    { key: "/listStock", label: "재고 현황 조회" },
-    { key: "/stockManage", label: "재고 분석" },
-  ];
-
-  const tabItems = items2.map((item) => {
-    let Component;
-    switch (item.key) {
-      case "/requestStock":
-        Component = <RequestStock />;
-        break;
-      case "/listStock":
-        Component = <ListStock />;
-        break;
-      case "/stockManage":
-        Component = <StockManage />;
-        break;
-      default:
-        Component = <div>404</div>;
-    }
-
-    return {
-      key: item.key,
-      label: item.label,
-      children: Component,
-    };
-  });
 
   return (
     <Layout>
       {/* <Sider width={200} trigger={null} collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
         <Menu items={items} mode="inline" theme="dark" onClick={(a) => a} />
       </Sider>       */}
-      {/* <SidebarMenu /> */}
-      <Tabs
-        tabPosition={tabPosition}
-        // items={Array.from({ length: 3 }).map((_, i) => {
-        //   const id = String(i + 1);
-        //   return {
-        //     label: `Tab ${id}`,
-        //     key: id,
-        //     children: `Content of Tab ${id}`,
-        //   };
-        // })}
-        items={tabItems}
-      />
-      <Content>
+      <SidebarMenu />
+
+      <Content
+        style={{ padding: "1rem", minHeight: "100vh" }}
+        className="right-side"
+      >
         <Dropdown menu={{ items }} trigger={["click"]}>
           <a onClick={(e) => e.preventDefault()}>
             <InfoCircleTwoTone
@@ -257,9 +256,11 @@ const ExAntd = () => {
             />
           </a>
         </Dropdown>
+        <h2>Main </h2>
+        <Outlet />
       </Content>
     </Layout>
   );
 };
 
-export default ExAntd;
+export default FixedLayout2;

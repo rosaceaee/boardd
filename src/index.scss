@@ -1,6 +1,32 @@
 .wrapp {
   min-height: 100vh;
-  padding: 0 2rem;
+  padding: 0;
   height: calc(100vh - 20px);
   overflow: auto;
+  justify-content: space-around;
+}
+
+.here {
+  border: 2px solid red;
+}
+.summ-wrap {
+  display: flex;
+  justify-content: space-around;
+  max-width: 120rem;
+  width: calc(100% - 4rem);
+  margin-bottom: 1rem;
+  padding: 10px;
+  cursor: pointer;
+  .tit {
+    font-size: 1.05rem;
+  }
+  .num {
+    font-size: 1rem;
+  }
+  div {
+    &:hover {
+      background: #333 !important;
+      color: #fff !important;
+    }
+  }
 }

@@ -2,6 +2,7 @@ import React from "react";
 
 interface BoxProps {
   radius: number;
+  widthh: number;
   background: string;
   children?: React.ReactNode;
   style?: React.CSSProperties;
@@ -13,6 +14,7 @@ const Box = ({
   background,
   children,
   style,
+  widthh,
   className = "",
   ...rest
 }: BoxProps) => {
@@ -20,6 +22,7 @@ const Box = ({
     <div
       className={className}
       style={{
+        width: `${widthh}px`,
         borderRadius: `${radius}px`,
         background: "#ffffff",
         ...style,

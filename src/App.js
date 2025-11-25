@@ -1,26 +1,141 @@
 import logo from "./logo.svg";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  useNavigate,
+  Outlet,
+  useLocation,
+} from "react-router-dom";
+import { SearchOutlined, InfoCircleTwoTone } from "@ant-design/icons";
+import {
+  Layout,
+  Row,
+  Col,
+  Menu,
+  Table,
+  Input,
+  Button,
+  Modal,
+  Space,
+  Dropdown,
+  Flex,
+  Tabs,
+  Theme,
+} from "antd";
+
 import "./App.css";
 import "./custom.scss";
-import ExAntd from "./ExAntd";
-import Example from "./Example";
 import Settings from "./list/Settings";
 import UserPage from "./list/UserPage";
 import ManageStress from "./list/ManageStress";
-import Part from "./compo/Part";
-import Part2 from "./compo/Part2";
+import RequestStock from "./compo/RequestStock";
+import SellManage from "./list/SellManage";
+import ListStock from "./list/ListStock";
+// App.js
+
+import {
+  UserOutlined,
+  SettingOutlined,
+  BarChartOutlined,
+  FileTextOutlined,
+  FolderOpenOutlined,
+} from "@ant-design/icons";
+
+const { Sider, Content } = Layout;
+
+const SidebarMenu = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const items = [
+    { key: "/", icon: <BarChartOutlined />, label: "summary" },
+    { key: "/stress", icon: <UserOutlined />, label: "ManageStress" },
+    { key: "/sellManage", icon: <FileTextOutlined />, label: "매출관리" },
+    { key: "/usrpage", icon: <UserOutlined />, label: "User Page (중첩)" },
+  ];
+
+  const handleMenuClick = (e) => {
+    navigate(e.key);
+  };
+
+  let currentPath = location.pathname;
+
+  const selectedKeys = items
+    .filter(
+      (item) => item.key && currentPath.startsWith(item.key) && item.key !== "/"
+    )
+    .map((item) => item.key);
+
+  if (currentPath === "/") {
+    selectedKeys.push("/");
+  }
+
+  const finalSelectedKeys = selectedKeys.length > 0 ? selectedKeys : ["/"];
+
+  return (
+    <Sider width={300} className="left-side">
+      <div
+        style={{
+          height: 32,
+          margin: 16,
+          background: "rgba(255, 255, 255, 0.2)",
+          color: "white",
+        }}
+      >
+        zzz
+      </div>
+      <Menu
+        items={items}
+        mode="inline"
+        onClick={handleMenuClick}
+        selectedKeys={finalSelectedKeys}
+      />
+    </Sider>
+  );
+};
+
+const FixedLayout = () => {
+  return (
+    <Layout style={{ minHeight: "100vh" }}>
+      <SidebarMenu />
+
+      <Layout>
+        <Content
+          style={{
+            margin: "24px 16px",
+            padding: 24,
+            minHeight: "calc(100vh - 48px)",
+
+            overflowY: "auto",
+          }}
+        >
+          <Outlet />
+        </Content>
+      </Layout>
+    </Layout>
+  );
+};
 
 function App() {
   return (
     <div className="App">
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Settings />}></Route>
-          <Route path="/part/*" element={<Part />}></Route>
-          <Route path="/settings/*" element={<Settings />}></Route>
-          <Route path="/usrpage/*" element={<UserPage />}></Route>
-          <Route path="/stress/*" element={<ManageStress />}></Route>
-          <Route path="*"></Route>
+          <Route path="/" element={<FixedLayout />}>
+            <Route index element={<Settings />} />
+
+            <Route path="stress" element={<ManageStress />} />
+            <Route path="listStock" element={<ListStock />} />
+
+            <Route path="part/*" element={<RequestStock />} />
+            <Route path="settings/*" element={<Settings />} />
+            <Route path="usrpage/*" element={<UserPage />} />
+            <Route path="sellmanage/*" element={<SellManage />} />
+
+            <Route path="*" element={<div>404 Page Not Found</div>}></Route>
+          </Route>
         </Routes>
       </BrowserRouter>
     </div>

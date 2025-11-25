@@ -1,13 +1,43 @@
 import React, { useState, useEffect, useReducer, useMemo } from "react";
+import Instock from "../manage/Instock";
+import Outstock from "../manage/Outstock";
 import { SearchOutlined, InfoCircleTwoTone } from "@ant-design/icons";
-import { Layout, Row, Col, Menu, Table, Input, Button, Modal, Space, Dropdown, Flex, Tabs } from "antd";
+import {
+  Layout,
+  Row,
+  Col,
+  Menu,
+  Table,
+  Input,
+  Button,
+  Modal,
+  Space,
+  Dropdown,
+  Flex,
+  Tabs,
+} from "antd";
 
 import { useNavigate } from "react-router-dom";
 
 import { Bar } from "react-chartjs-2";
-import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from "chart.js";
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+} from "chart.js";
 
-ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend
+);
 const initialState = [];
 
 const reducer = (state, action) => {
@@ -29,9 +59,9 @@ const generateChartData = (columns, dataSource, labelKey) => {
     .map((col) => ({
       label: col.title,
       data: dataSource.map((item) => item[col.dataIndex]),
-      backgroundColor: `rgba(${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, ${Math.floor(
+      backgroundColor: `rgba(${Math.floor(Math.random() * 255)}, ${Math.floor(
         Math.random() * 255
-      )}, 0.5)`,
+      )}, ${Math.floor(Math.random() * 255)}, 0.5)`,
       borderColor: "rgba(0, 0, 0, 0.1)",
       borderWidth: 1,
     }));
@@ -41,10 +71,20 @@ const generateChartData = (columns, dataSource, labelKey) => {
 
 const columns = [
   { title: "범례", dataIndex: "title", key: "title" },
-  { title: "하나", dataIndex: "fir", key: "fir", sorter: (a, b) => a.fir - b.fir },
-  { title: "둘", dataIndex: "scnd", key: "scnd", sorter: (a, b) => a.scnd - b.scnd },
+  {
+    title: "하나",
+    dataIndex: "fir",
+    key: "fir",
+    sorter: (a, b) => a.fir - b.fir,
+  },
+  {
+    title: "둘",
+    dataIndex: "scnd",
+    key: "scnd",
+    sorter: (a, b) => a.scnd - b.scnd,
+  },
 ];
-const Part = () => {
+const RequestStock = () => {
   const [chkDeleteModal, setChkDeleteModal] = useState(false);
   const [selectedRow, setSelectedRow] = useState(null);
   const [searchKeyword, setSearchKeyword] = useState("");
@@ -125,18 +165,64 @@ const Part = () => {
 
   const { Sider, Header, Content, Footer } = Layout;
   // 차트 데이터 생성 labelKey-> "title"
-  const chartData = useMemo(() => generateChartData(columns, filteredData, "title"), [filteredData]);
+  const chartData = useMemo(
+    () => generateChartData(columns, filteredData, "title"),
+    [filteredData]
+  );
+  const onChange = (key) => {
+    console.log(key);
+  };
 
+  const items2 = [
+    { key: "/ReportSell", label: "매출 현황 분석" },
+    { key: "/ManageShipping", label: "주문/배송 관리" },
+    // { key: "/ManageShipping", label: "상품 성과 분석" },
+    { key: "/sub12", label: "광고/마케팅 성과" },
+  ];
+
+  const tabItems = items2.map((item) => {
+    let Component;
+    switch (item.key) {
+      case "/ReportSell":
+        Component = <Instock />;
+        break;
+
+      // case "/ManageShipping":
+      //   Component = <ManageShipping />;
+      //   break;
+      default:
+        Component = <div>404</div>;
+    }
+
+    return {
+      key: item.key,
+      label: item.label,
+      children: Component,
+    };
+  });
+  const tabItms = [
+    {
+      key: "1",
+      label: "입/출고 등록      ",
+      children: <Instock />,
+    },
+    {
+      key: "2",
+      label: "출고b 관리",
+      children: <Outstock />,
+    },
+  ];
   return (
     <>
       <section style={{ minHeight: "100vh" }}>
-        <Row className="wrapp">
-          <Col size={12} style={{ border: "2px solid red" }}>
+        <Tabs items={tabItms} onChange={onChange} />
+        {/* <Row className="wrapp">
+          <Col size={24} style={{ border: "2px solid red", width: "100%" }}>
             <Flex style={{ flexDirection: "column" }}>
               <Col>
                 <Space direction="horizontal" style={{ marginBottom: "20px" }}>
                   {" "}
-                  <h2>pardt</h2>{" "}
+                  <h2>입/출고 등록</h2>{" "}
                   <Input
                     placeholder="partt"
                     name="title"
@@ -172,7 +258,12 @@ const Part = () => {
                       type="text"
                       onChange={(e) => setSearchKeyword(e.target.value)}
                     />
-                    <Button type="primary" shape="circle" icon={<SearchOutlined />} onClick={searchData} />
+                    <Button
+                      type="primary"
+                      shape="circle"
+                      icon={<SearchOutlined />}
+                      onClick={searchData}
+                    />
                   </div>
                 </Space>
               </Col>
@@ -180,22 +271,21 @@ const Part = () => {
               <Col style={{ marginTop: "1rem" }}>
                 <Table
                   columns={columns}
-                  dataSource={filteredData.map((item, idx) => ({ ...item, key: idx }))}
+                  dataSource={filteredData.map((item, idx) => ({
+                    ...item,
+                    key: idx,
+                  }))}
                   onRow={(record, rowIndex) => ({
                     onClick: () => deleteRow(rowIndex),
                   })}
                   pagination={true}
                 />
               </Col>
-
-              <Col>
-                <Bar data={chartData} />
-              </Col>
             </Flex>
           </Col>
-          <Col size={12} style={{ border: "2px solid red" }}>
-            <div></div>
 
+          <Col size={24} style={{ border: "2px solid red", width: "100%" }}>
+            <h2>출고 관리</h2>{" "}
             <Flex style={{ flexDirection: "column" }}>
               <Col>
                 <Space direction="horizontal" style={{ marginBottom: "20px" }}>
@@ -234,13 +324,31 @@ const Part = () => {
                       type="text"
                       onChange={(e) => setSearchKeyword(e.target.value)}
                     />
-                    <Button type="primary" shape="circle" icon={<SearchOutlined />} onClick={searchData} />
+                    <Button
+                      type="primary"
+                      shape="circle"
+                      icon={<SearchOutlined />}
+                      onClick={searchData}
+                    />
                   </div>
                 </Space>
               </Col>
+              <Col style={{ marginTop: "1rem", width: "100%" }}>
+                <Table
+                  columns={columns}
+                  dataSource={filteredData.map((item, idx) => ({
+                    ...item,
+                    key: idx,
+                  }))}
+                  onRow={(record, rowIndex) => ({
+                    onClick: () => deleteRow(rowIndex),
+                  })}
+                  pagination={true}
+                />
+              </Col>
             </Flex>
           </Col>
-        </Row>
+        </Row> */}
         <Modal
           title="삭제 확인"
           open={chkDeleteModal}
@@ -260,4 +368,4 @@ const Part = () => {
   );
 };
 
-export default Part;
+export default RequestStock;

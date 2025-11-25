@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useReducer, useMemo } from "react";
 import Box from "../compo/Box.tsx";
-import Part from "../compo/Part";
+import RequestStock from "../compo/RequestStock";
 
 import { SearchOutlined, InfoCircleTwoTone } from "@ant-design/icons";
 import {
@@ -175,88 +175,61 @@ const Settings = () => {
     [filteredData]
   );
 
-  // 메뉴 리스트
-  const items = [
-    { key: "1", label: "summary" },
-    {
-      key: "/stress",
-
-      label: "ManageStress",
-    },
-    {
-      key: "/settings",
-      label: (
-        <a href="" target="self" rel="noopener noreferrer">
-          opr3
-        </a>
-      ),
-    },
-  ];
-
-  const SidebarMenu = ({ collapsed, setCollapsed }) => {
-    const navigate = useNavigate();
-
-    const items = [
-      { key: "/", label: "summary" },
-      { key: "/stress", label: "ManageStredss" },
-      {
-        key: "",
-        label: "asdf",
-        children: Array.from({ length: 3 }).map((_, j) => {
-          const subKey = 3;
-          return {
-            key: subKey,
-            label: `option${subKey}`,
-          };
-        }),
-      },
-    ];
-
-    const handleMenuClick = (e) => {
-      navigate(e.key);
-    };
-
-    return (
-      <Sider width={200}>
-        <Menu
-          items={items}
-          mode="inline"
-          theme="dark"
-          onClick={handleMenuClick}
-        />
-      </Sider>
-    );
-  };
-
   const changeTabPosition = (e) => {
     setTabPosition(e.target.value);
   };
 
   return (
     <Layout>
-      {/* <Sider width={200} trigger={null} collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
-        <Menu items={items} mode="inline" theme="dark" onClick={(a) => a} />
-      </Sider>       */}
-      <SidebarMenu />
+      <Content
+        style={{ padding: "1rem", minHeight: "100vh" }}
+        className="right-side"
+      >
+        <h2>Main </h2>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            gap: "10px",
+            flex: "0 0 20%",
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              gap: "10px",
+              flexDirection: "column",
+              flex: "0 0 40%;",
+              maxWidth: "35rem",
+              width: "100%",
+            }}
+          >
+            <Box radius={15} className="box" style={{}}>
+              <h2>UsrName</h2>
+              <p>greetings!</p>
+            </Box>{" "}
+            <Box radius={15} className="box" style={{ height: "100%" }}>
+              <h2>UsrName</h2>
+              <p>greetings!</p>
+              <h2>UsrName</h2>
+              <p>greetings!</p>
+              <h2>UsrName</h2>
+              <p>greetings!</p>
+            </Box>
+          </div>
 
-      <Content>
-        <Dropdown menu={{ items }} trigger={["click"]}>
-          <a onClick={(e) => e.preventDefault()}>
-            <InfoCircleTwoTone
-              style={{
-                fontSize: "1.4rem",
-                position: "fixed",
-                right: "1rem",
-                margin: "1rem",
-              }}
-            />
-          </a>
-        </Dropdown>
-        <h2>Settings.js </h2>
-        <Box radius={15} className="box">
-          test
-        </Box>
-        <section style={{ minHeight: "100vh" }}>
+          <Box
+            radius={15}
+            className="box"
+            style={{ maxWidth: "100%", flex: "1", height: "100%" }}
+          >
+            <h2>UsrName</h2>
+            <p>greetings!</p>
+            <Bar data={chartData} />
+          </Box>
+        </div>
+
+        {/* <section style={{ minHeight: "100vh" }}>
           <Row className="wrapp">
             <Col size={12} style={{ border: "2px solid red" }}>
               <Flex style={{ flexDirection: "column" }}>
@@ -399,7 +372,7 @@ const Settings = () => {
               {selectedRow?.title}, {selectedRow?.fir}, {selectedRow?.scnd}
             </p>
           </Modal>
-        </section>
+        </section> */}
       </Content>
     </Layout>
   );
