@@ -1,4 +1,9 @@
 import React, { useState, useEffect, useReducer, useMemo } from "react";
+import Instock from "../manage/Instock";
+import Outstock from "../manage/Outstock";
+import PerfumeInvent from "../manage/PerfumeInvent";
+import BodyInvent from "../manage/BodyInvent";
+import CandleInvent from "../manage/CandleInvent";
 import { SearchOutlined, InfoCircleTwoTone } from "@ant-design/icons";
 import {
   Layout,
@@ -16,25 +21,32 @@ import {
 } from "antd";
 import Box from "../compo/Box.tsx";
 
+import { Bar } from "react-chartjs-2";
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+} from "chart.js";
+
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend
+);
+
 const ListStock = () => {
   const [chkDeleteModal, setChkDeleteModal] = useState(false);
   const [selectedRow, setSelectedRow] = useState(null);
   const [searchKeyword, setSearchKeyword] = useState("");
   const [filteredData, setFilteredData] = useState([]);
   const [tabPosition, setTabPosition] = useState("left");
-
-  const [input, setInput] = useState({
-    title: "",
-    fir: "",
-    scnd: "",
-  });
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setInput((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const { Sider, Header, Content, Footer } = Layout;
 
   const columns = [
     { title: "범례", dataIndex: "title", key: "title" },
@@ -51,12 +63,136 @@ const ListStock = () => {
       sorter: (a, b) => a.scnd - b.scnd,
     },
   ];
+  const generateChartData = (columns, dataSource, labelKey) => {
+    const labels = dataSource.map((item) => item[labelKey]);
 
-  return (
-    <>
-      <section style={{ minHeight: "100vh" }}>
+    const datasets = columns
+      .filter((col) => col.dataIndex !== labelKey)
+      .map((col) => ({
+        label: col.title,
+        data: dataSource.map((item) => item[col.dataIndex]),
+        backgroundColor: `rgba(${Math.floor(Math.random() * 255)}, ${Math.floor(
+          Math.random() * 255
+        )}, ${Math.floor(Math.random() * 255)}, 0.5)`,
+        borderColor: "rgba(0, 0, 0, 0.1)",
+        borderWidth: 1,
+      }));
+
+    return { labels, datasets };
+  };
+  const chartData = useMemo(
+    () => generateChartData(columns, filteredData, "title"),
+    [filteredData]
+  );
+  const [input, setInput] = useState({
+    title: "",
+    fir: "",
+    scnd: "",
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setInput((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const { Sider, Header, Content, Footer } = Layout;
+
+  const Txt = () => {
+    const columns = [
+      //상품명 상품코드 카테고리 재고수량 안전재고 상태 최근입고일 판매중단여부
+
+      { title: "prdName", dataIndex: "title", key: "title" },
+      {
+        title: "status",
+        dataIndex: "first",
+        key: "first",
+
+        render: (statusVal, idx) => {
+          let btn;
+          switch (statusVal) {
+            case "ari":
+              btn = <Button type="primary">승인</Button>;
+              break;
+            case "half":
+              btn = <Button type="primary">halkf</Button>;
+              break;
+            case "out":
+              btn = <Button type="primary">out</Button>;
+              break;
+            default:
+              btn = <span>상태 정보 없음</span>;
+          }
+          return btn;
+        },
+      },
+      {
+        title: "suryou",
+        dataIndex: "scnd",
+        key: "scnd",
+        sorter: (a, b) => a.scnd - b.scnd,
+      },
+      {
+        title: "price",
+        dataIndex: "scnd",
+        key: "scnd",
+        sorter: (a, b) => a.scnd - b.scnd,
+      },
+      {
+        title: "nokori",
+        dataIndex: "scnd",
+        key: "scnd",
+        sorter: (a, b) => a.scnd - b.scnd,
+      },
+    ];
+
+    const data1 = [
+      {
+        key: "1",
+        title: "ari",
+        first: "ari",
+        scnd: "1",
+      },
+      {
+        key: "2",
+        title: "out",
+        first: "out",
+        scnd: "77",
+      },
+      {
+        key: "3",
+        title: "John Brown",
+        first: 32,
+        scnd: "33",
+      },
+      {
+        key: "4",
+        title: "John Brown",
+        first: 32,
+        scnd: "5",
+      },
+      {
+        key: "2",
+        title: "out",
+        first: "out",
+        scnd: "77",
+      },
+      {
+        key: "2",
+        title: "out",
+        first: "out",
+        scnd: "77",
+      },
+      {
+        key: "2",
+        title: "out",
+        first: "out",
+        scnd: "77",
+      },
+    ];
+    return (
+      <>
         <h1>재고 현황 조회</h1>
-        <p>
+        {/* <p>
           1. 기본 요약 정보 (상단에 카드 형태로) 한눈에 전체 상황을 볼 수 있게
           요약: 🔹 전체 상품 수 🔹 전체 재고 수량 (예: 총 12,350개) 🔹 품절 상품
           수 🔹 재고 부족 상품 수 (예: 10개 이하 남은 상품) 🔹 재입고 예정 상품
@@ -83,7 +219,8 @@ const ListStock = () => {
         </p>
 
         <br />
-        <br />
+        <br /> */}
+
         <div className="summ-wrap" style={{}}>
           <Box radius={15} widthh={200}>
             <h4 className="tit">전체 상품수</h4>
@@ -107,30 +244,45 @@ const ListStock = () => {
           </Box>
         </div>
         {/* xlsx파일 다운로드 팡션 추가 */}
-
-        <h3>전체</h3>
+        {/* <Bar data={chartData} /> */}
+        <br />
+        <br />
         <Table
           columns={columns}
-          style={{ width: "100%" }}
-          dataSource={filteredData.map((item, idx) => ({
-            ...item,
-            key: idx,
-          }))}
+          dataSource={data1}
+          // dataSource={filteredData.map((item, idx) => ({
+          //   ...item,
+          //   key: idx,
+          // }))}
+          // onRow={(record, rowIndex) => ({
+          //   onClick: () => deleteRow(rowIndex),
+          // })}
           pagination={true}
         />
-
-        <Modal
-          title="삭제 확인"
-          open={chkDeleteModal}
-          okText="삭제"
-          cancelText="취소"
-        >
-          <p>
-            이 항목을 삭제할까요?
-            <br />
-            {selectedRow?.title}, {selectedRow?.fir}, {selectedRow?.scnd}
-          </p>
-        </Modal>
+      </>
+    );
+  };
+  const tabItms = [
+    {
+      key: "1",
+      label: "향수",
+      children: <PerfumeInvent />,
+    },
+    {
+      key: "2",
+      label: "바디",
+      children: <BodyInvent />,
+    },
+    {
+      key: "3",
+      label: "candle",
+      children: <CandleInvent />,
+    },
+  ];
+  return (
+    <>
+      <section style={{ minHeight: "100vh" }}>
+        <Tabs items={tabItms} />
       </section>
     </>
   );

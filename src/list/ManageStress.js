@@ -200,7 +200,7 @@ const ExAntd = () => {
   const items2 = [
     { key: "/requestStock", label: "입/출고 등록" },
     { key: "/listStock", label: "재고 현황 조회" },
-    { key: "/stockManage", label: "재고 분석" },
+    // { key: "/stockManage", label: "재고 분석" },
   ];
 
   const tabItems = items2.map((item) => {

@@ -203,12 +203,12 @@ const RequestStock = () => {
   const tabItms = [
     {
       key: "1",
-      label: "입/출고 등록      ",
+      label: "입/출고 일람      ",
       children: <Instock />,
     },
     {
       key: "2",
-      label: "출고b 관리",
+      label: "노코리 일람",
       children: <Outstock />,
     },
   ];

@@ -15,6 +15,9 @@ import {
   Tabs,
 } from "antd";
 
+import { DATA_FILTERS } from "../manage/stockData";
+import { dummyStockApi } from "../manage/dummyStockApi";
+
 const initialState = [];
 
 const reducer = (state, action) => {
@@ -27,6 +30,7 @@ const reducer = (state, action) => {
       return state;
   }
 };
+
 const columns = [
   { title: "범례", dataIndex: "title", key: "title" },
   {

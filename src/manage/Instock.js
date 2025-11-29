@@ -14,7 +14,9 @@ import {
   Flex,
   Tabs,
 } from "antd";
-
+import { FormProvider } from "rc-field-form";
+import { DATA_FILTERS } from "../manage/stockData";
+import { dummyStockApi } from "../manage/dummyStockApi";
 const initialState = [];
 
 const reducer = (state, action) => {
@@ -27,23 +29,57 @@ const reducer = (state, action) => {
       return state;
   }
 };
+
 const columns = [
-  { title: "범례", dataIndex: "title", key: "title" },
   {
-    title: "하나",
-    dataIndex: "fir",
-    key: "fir",
-    sorter: (a, b) => a.fir - b.fir,
+    title: "제품명",
+    dataIndex: "prdName",
+    key: "prdName",
   },
   {
-    title: "둘",
-    dataIndex: "scnd",
-    key: "scnd",
-    sorter: (a, b) => a.scnd - b.scnd,
+    title: "현재 상태",
+    dataIndex: "status",
+    key: "status",
+    render: (statusVal) => {
+      let btn;
+      switch (statusVal) {
+        case "Instock":
+          btn = <Button type="primary">재고</Button>;
+          break;
+        case "ArrivingSoon":
+          btn = <Button type="default">ArrivingSoon</Button>;
+          break;
+        case "NoJaiko":
+          btn = <Button danger>jaikono</Button>;
+          break;
+        default:
+          btn = <span>{statusVal}</span>;
+      }
+      return btn;
+    },
+  },
+  {
+    title: "수량",
+    dataIndex: "suryou",
+    key: "suryou",
+    sorter: (a, b) => a.suryou - b.suryou,
+    render: (suryou) => suryou.toLocaleString(),
+    align: "right",
+  },
+  {
+    title: "가격 (원)",
+    dataIndex: "price",
+    key: "price",
+    sorter: (a, b) => a.price - b.price,
+    render: (price) => `${price.toLocaleString()} 원`,
+    align: "right",
   },
 ];
+
 const Instock = () => {
-  const [chkDeleteModal, setChkDeleteModal] = useState(false);
+  const [activeFilter, setActiveFilter] = useState(DATA_FILTERS.all);
+  const [tableData, setTableData] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
   const [selectedRow, setSelectedRow] = useState(null);
   const [searchKeyword, setSearchKeyword] = useState("");
   const [cellData, dispatch] = useReducer(reducer, initialState);
@@ -58,9 +94,6 @@ const Instock = () => {
     scnd: "",
   });
 
-  // useEffect(() => {
-
-  // }, [currArea]);
   const onHeree = (a) => {
     setCurrArea(currArea === a ? null : a);
   };
@@ -87,42 +120,27 @@ const Instock = () => {
     }
   }, [searchKeyword, cellData]);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setInput((prev) => ({ ...prev, [name]: value }));
+  const handleFilterClick = (filterId) => {
+    setActiveFilter(filterId);
   };
 
-  const addRow = () => {
-    if (input.title && input.fir && input.scnd) {
-      dispatch({
-        type: "add",
-        payload: {
-          title: input.title,
-          fir: Number(input.fir),
-          scnd: Number(input.scnd),
-        },
-      });
-      setInput({ title: "", fir: "", scnd: "" });
-    } else {
-      alert("값을 모두 입력해주세요.");
-    }
-  };
+  useEffect(() => {
+    const fetchTableData = async () => {
+      setIsLoading(true);
+      setTableData([]);
 
-  const deleteRow = (index) => {
-    setSelectedRow({ ...cellData[index], index });
-    setChkDeleteModal(true);
-  };
+      try {
+        const data = await dummyStockApi(activeFilter);
+        setTableData(data);
+      } catch (error) {
+        console.error("error: call the data", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
 
-  const confirmDelete = () => {
-    dispatch({ type: "delete", index: selectedRow.index });
-    setChkDeleteModal(false);
-    setSelectedRow(null);
-  };
-
-  const cancelDelete = () => {
-    setChkDeleteModal(false);
-    setSelectedRow(null);
-  };
+    fetchTableData();
+  }, [activeFilter]);
 
   const searchData = () => {
     const keyword = searchKeyword.toLowerCase().trim();
@@ -145,7 +163,7 @@ const Instock = () => {
   return (
     <>
       <section style={{ minHeight: "100vh" }}>
-        <h2>입/출고 등록</h2>{" "}
+        <h2>입/출고 일람</h2>{" "}
         {/* <div style={{ display: "flex", marginLeft: "auto" }}>
           <Input
             placeholder="찾을 데이터 입력"
@@ -162,127 +180,104 @@ const Instock = () => {
         <Row className="wrapp" style={{ flexDirection: "row" }}>
           <Col
             size={12}
-            style={{ width: "50%" }}
+            style={{ width: "100%" }}
             className={getBoxClassName("instock")}
             onClick={() => onHeree("instock")}
           >
-            <h2>입고</h2>
             <Flex style={{ flexDirection: "column" }}>
-              <Col>
+              {/* <Col>
                 <Space
                   direction="horizontal"
                   style={{ marginBottom: "20px" }}
                   id="instock-area"
                 >
-                  <Input
-                    placeholder="partt"
-                    name="title"
-                    value={input.title}
-                    onChange={handleChange}
-                    style={{ width: 120 }}
-                  />
-                  <Input
-                    placeholder="cell1"
-                    name="fir"
-                    type="number"
-                    value={input.fir}
-                    onChange={handleChange}
-                    style={{ width: 100 }}
-                  />
-                  <Input
-                    placeholder="cell2"
-                    name="scnd"
-                    type="number"
-                    value={input.scnd}
-                    onChange={handleChange}
-                    style={{ width: 100 }}
-                  />
-                  <Button type="primary" onClick={addRow}>
-                    추가
-                  </Button>
+                  <InputElWrap />
+                  <Button type="primary">추가</Button>
                 </Space>
-              </Col>
-
+              </Col> */}
               <Col style={{ marginTop: "1rem" }}>
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    marginBottom: "1rem",
+                  }}
+                >
+                  <div style={{ display: "flex", gap: "1rem" }}>
+                    <div style={{ display: "flex", gap: "1rem" }}>
+                      <Button
+                        type={
+                          activeFilter === DATA_FILTERS.stocks
+                            ? "primary"
+                            : "default"
+                        }
+                        onClick={() => handleFilterClick(DATA_FILTERS.stocks)}
+                      >
+                        Stocks
+                      </Button>
+
+                      <Button
+                        type={
+                          activeFilter === DATA_FILTERS.arriving_soon
+                            ? "primary"
+                            : "default"
+                        }
+                        onClick={() =>
+                          handleFilterClick(DATA_FILTERS.arriving_soon)
+                        }
+                      >
+                        Arriving soon
+                      </Button>
+
+                      <Button
+                        type={
+                          activeFilter === DATA_FILTERS.reorder
+                            ? "primary"
+                            : "default"
+                        }
+                        onClick={() => handleFilterClick(DATA_FILTERS.reorder)}
+                      >
+                        Reoder
+                      </Button>
+                    </div>
+                  </div>
+
+                  <div>
+                    <input type="text" placeholder="search sth" />{" "}
+                    <Button type="primary">go</Button>
+                  </div>
+                </div>
+
                 <Table
                   columns={columns}
-                  dataSource={filteredData.map((item, idx) => ({
-                    ...item,
-                    key: idx,
-                  }))}
-                  onRow={(record, rowIndex) => ({
-                    onClick: () => deleteRow(rowIndex),
-                  })}
+                  dataSource={tableData}
+                  // dataSource={filteredData.map((item, idx) => ({
+                  //   ...item,
+                  //   key: idx,
+                  // }))}
+                  // onRow={(record, rowIndex) => ({
+                  //   onClick: () => deleteRow(rowIndex),
+                  // })}
                   pagination={true}
                 />
+
+                <Button type="primary">pdf download</Button>
               </Col>
             </Flex>
           </Col>
-          <Col
+          {/* <Col
             size={12}
             style={{ width: "50%" }}
             className={getBoxClassName("outstock")}
             onClick={() => onHeree("outstock")}
           >
-            <h2>출고</h2>
-            <Flex style={{ flexDirection: "column" }}>
-              <Col>
-                <Space direction="horizontal" style={{ marginBottom: "20px" }}>
-                  {" "}
-                  <Input
-                    placeholder="partt"
-                    name="title"
-                    value={input.title}
-                    onChange={handleChange}
-                    style={{ width: 120 }}
-                  />
-                  <Input
-                    placeholder="cell1"
-                    name="fir"
-                    type="number"
-                    value={input.fir}
-                    onChange={handleChange}
-                    style={{ width: 100 }}
-                  />
-                  <Input
-                    placeholder="cell2"
-                    name="scnd"
-                    type="number"
-                    value={input.scnd}
-                    onChange={handleChange}
-                    style={{ width: 100 }}
-                  />
-                  <Button type="primary" onClick={addRow}>
-                    추가
-                  </Button>
-                </Space>
-
-                <Space
-                  style={{ marginBottom: "20px", padding: "20px" }}
-                ></Space>
-              </Col>
-
-              <Col style={{ marginTop: "1rem" }}>
-                <Table
-                  columns={columns}
-                  dataSource={filteredData.map((item, idx) => ({
-                    ...item,
-                    key: idx,
-                  }))}
-                  onRow={(record, rowIndex) => ({
-                    onClick: () => deleteRow(rowIndex),
-                  })}
-                  pagination={true}
-                />
-              </Col>
-            </Flex>
-          </Col>
+          </Col> */}
         </Row>
         <Modal
           title="삭제 확인"
-          open={chkDeleteModal}
-          onOk={confirmDelete}
-          onCancel={cancelDelete}
+          // open={chkDeleteModal}
+          // onOk={confirmDelete}
+          // onCancel={cancelDelete}
           okText="삭제"
           cancelText="취소"
         >
