@@ -8,7 +8,11 @@ import {
   Outlet,
   useLocation,
 } from "react-router-dom";
-import { SearchOutlined, InfoCircleTwoTone } from "@ant-design/icons";
+import {
+  SearchOutlined,
+  InfoCircleTwoTone,
+  QuestionCircleOutlined,
+} from "@ant-design/icons";
 import {
   Layout,
   Row,
@@ -51,7 +55,7 @@ const SidebarMenu = () => {
 
   const items = [
     { key: "/", icon: <BarChartOutlined />, label: "summary" },
-    { key: "/stress", icon: <UserOutlined />, label: "ManageStress" },
+    { key: "/stress", icon: <UserOutlined />, label: "재고관리" },
     { key: "/sellManage", icon: <FileTextOutlined />, label: "매출관리" },
     { key: "/usrpage", icon: <UserOutlined />, label: "User Page (중첩)" },
   ];
@@ -75,22 +79,27 @@ const SidebarMenu = () => {
   const finalSelectedKeys = selectedKeys.length > 0 ? selectedKeys : ["/"];
 
   return (
-    <Sider width={300} className="left-side">
+    <Sider width={150} className="left-side">
       <div
         style={{
-          height: 32,
+          height: 36,
           margin: 16,
           background: "rgba(255, 255, 255, 0.2)",
           color: "white",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
         }}
       >
-        zzz
+        Test Logo
       </div>
       <Menu
         items={items}
         mode="inline"
         onClick={handleMenuClick}
         selectedKeys={finalSelectedKeys}
+        theme="dark"
+        inlineCollapsed
       />
     </Sider>
   );
@@ -98,16 +107,14 @@ const SidebarMenu = () => {
 
 const FixedLayout = () => {
   return (
-    <Layout style={{ minHeight: "100vh" }}>
+    <Layout style={{ minHeight: "100vh", padding: "0" }}>
       <SidebarMenu />
 
       <Layout>
         <Content
           style={{
-            margin: "24px 16px",
-            padding: 24,
+            margin: "10px 1rem",
             minHeight: "calc(100vh - 48px)",
-
             overflowY: "auto",
           }}
         >
@@ -138,6 +145,15 @@ function App() {
           </Route>
         </Routes>
       </BrowserRouter>
+
+      <QuestionCircleOutlined
+        style={{
+          position: "fixed",
+          right: "1rem",
+          top: "1rem",
+          fontSize: "2rem",
+        }}
+      />
     </div>
   );
 }

@@ -1,4 +1,3 @@
-// stockData.js
 export const DATA_FILTERS = {
   all: "all",
   stocks: "stocks",

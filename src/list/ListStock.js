@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useReducer, useMemo } from "react";
 import Instock from "../manage/Instock";
 import Outstock from "../manage/Outstock";
-import PerfumeInvent from "../manage/PerfumeInvent";
-import BodyInvent from "../manage/BodyInvent";
-import CandleInvent from "../manage/CandleInvent";
+// import PerfumeInvent from "../manage/PerfumeInvent";
+// import BodyInvent from "../manage/BodyInvent";
+// import CandleInvent from "../manage/CandleInvent";
 import { SearchOutlined, InfoCircleTwoTone } from "@ant-design/icons";
 import {
   Layout,
@@ -266,17 +266,17 @@ const ListStock = () => {
     {
       key: "1",
       label: "향수",
-      children: <PerfumeInvent />,
+      // children: <PerfumeInvent />,
     },
     {
       key: "2",
       label: "바디",
-      children: <BodyInvent />,
+      // children: <BodyInvent />,
     },
     {
       key: "3",
       label: "candle",
-      children: <CandleInvent />,
+      // children: <CandleInvent />,
     },
   ];
   return (

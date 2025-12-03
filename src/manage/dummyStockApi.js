@@ -1,3 +1,5 @@
+/*** 입출고 관련 데이터 ***/
+
 import { DATA_FILTERS } from "./stockData.js";
 
 const dataMap = {
@@ -25,6 +27,13 @@ const dataMap = {
       suryou: 75,
       price: 350000,
     },
+    {
+      id: 202,
+      prdName: "222파우더리1",
+      status: "ArrivingSoon",
+      suryou: 75,
+      price: 350000,
+    },
   ],
   reorder: [
     {
@@ -37,9 +46,28 @@ const dataMap = {
     {
       id: 302,
       prdName: "캔들2",
-      status: "NoJaiko",
+      status: "reorder",
       suryou: 0,
       price: 60000,
+      key: "sibal",
+    },
+  ],
+  nokori: [
+    {
+      id: 401,
+      prdName: "디퓨저1",
+      status: "NoJaiko",
+      suryou: 0,
+      price: 120000,
+      key: "nokori111",
+    },
+    {
+      id: 402,
+      prdName: "디퓨저2",
+      status: "NoJaiko",
+      suryou: 0,
+      price: 90000,
+      key: "nokori1111",
     },
   ],
 };

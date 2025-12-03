@@ -6,17 +6,17 @@ interface BoxProps {
   background: string;
   children?: React.ReactNode;
   style?: React.CSSProperties;
+  text: string;
   className: string;
-  padding: number;
 }
 
-const Box = ({
+const CircleBox = ({
   radius,
   background,
   children,
   style,
   widthh,
-  padding,
+  text,
   className = "",
   ...rest
 }: BoxProps) => {
@@ -24,10 +24,11 @@ const Box = ({
     <div
       className={className}
       style={{
-        width: `${widthh}px`,
-        borderRadius: `${radius}px`,
-        background: "#ffffff",
-        padding: `${padding}rem`,
+        // width: `${widthh}px`,
+        width: `16px`,
+        height: `16px`,
+        borderRadius: `50%`,
+        background: `${background}`,
         ...style,
       }}
       {...rest}
@@ -37,4 +38,4 @@ const Box = ({
   );
 };
 
-export default Box;
+export default CircleBox;

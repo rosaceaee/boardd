@@ -46,13 +46,54 @@ const columns = [
     sorter: (a, b) => a.scnd - b.scnd,
   },
 ];
+const columns1 = [
+  {
+    title: "제품명",
+    dataIndex: "prdName",
+    key: "prdName",
+  },
+  {
+    title: "현재 상태",
+    dataIndex: "status",
+    key: "status",
+  },
+  {
+    title: "수량",
+    dataIndex: "suryou",
+    key: "suryou",
+    sorter: (a, b) => a.suryou - b.suryou,
+    render: (suryou) => suryou.toLocaleString(),
+    align: "right",
+  },
+  {
+    title: "가격 (원)",
+    dataIndex: "price",
+    key: "price",
+    sorter: (a, b) => a.price - b.price,
+    render: (price) => `${price.toLocaleString()} 원`,
+    align: "right",
+  },
+];
+
 const Outstock = () => {
   const [chkDeleteModal, setChkDeleteModal] = useState(false);
   const [selectedRow, setSelectedRow] = useState(null);
   const [searchKeyword, setSearchKeyword] = useState("");
   const [cellData, dispatch] = useReducer(reducer, initialState);
   const [filteredData, setFilteredData] = useState([]);
-  const [tabPosition, setTabPosition] = useState("left");
+  const [nokoriData, setNokoriData] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setIsLoading(true);
+      const data = await dummyStockApi(DATA_FILTERS.nokori);
+      setNokoriData(data);
+      setIsLoading(false);
+    };
+
+    fetchData();
+  }, []);
 
   const [input, setInput] = useState({
     title: "",
@@ -135,17 +176,14 @@ const Outstock = () => {
           <Col size={24} style={{ border: "2px solid red", width: "100%" }}>
             <Flex style={{ flexDirection: "column" }}>
               <Col style={{ marginTop: "1rem" }}>
-                <Table
+                {/* <Table
                   columns={columns}
-                  dataSource={filteredData.map((item, idx) => ({
-                    ...item,
-                    key: idx,
-                  }))}
                   onRow={(record, rowIndex) => ({
                     onClick: () => deleteRow(rowIndex),
                   })}
                   pagination={true}
-                />
+                /> */}
+                <Table columns={columns1} dataSource={nokoriData} />
               </Col>
             </Flex>
           </Col>
