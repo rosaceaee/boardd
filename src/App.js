@@ -1,4 +1,5 @@
 import logo from "./logo.svg";
+import React, { useState, useEffect } from "react";
 
 import {
   BrowserRouter,
@@ -27,6 +28,7 @@ import {
   Flex,
   Tabs,
   Theme,
+  Drawer,
 } from "antd";
 
 import "./App.css";
@@ -126,6 +128,11 @@ const FixedLayout = () => {
 };
 
 function App() {
+  const [open, setOpen] = useState(false);
+  const openthis = () => {
+    setOpen((a) => !a);
+  };
+
   return (
     <div className="App">
       <BrowserRouter>
@@ -151,9 +158,21 @@ function App() {
           position: "fixed",
           right: "1rem",
           top: "1rem",
-          fontSize: "2rem",
+          fontSize: "5rem",
         }}
+        onClick={openthis}
       />
+
+      <Drawer
+        title="Basic Drawer"
+        placement="right"
+        open={open}
+        closable={false}
+        getContainer={false}
+      >
+        <p onClick={() => setOpen(false)}>close</p>
+        <p>Some contents...</p>
+      </Drawer>
     </div>
   );
 }

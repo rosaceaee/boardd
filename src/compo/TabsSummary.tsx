@@ -5,6 +5,7 @@ export interface TabItem {
   name: string;
   fir: number;
   scnd: number;
+  count: number;
   prdName?: string;
 }
 
@@ -38,8 +39,9 @@ const TabsSummary: React.FC<CustomTabProps> = ({
       {activeContent ? (
         <div className="right">
           <h1>
-            {activeContent.scnd}
-
+            {" "}
+            {activeContent.count}
+            <br />
             {activeContent.prdName}
           </h1>
         </div>

@@ -225,13 +225,24 @@ const Settings = () => {
     const allTab = {
       key: "all",
       name: `전체 (${data.length})`,
-      scnd: data.length,
+      count: data.length,
       fir: 0,
+      prdName: data.map((item) => item.prdName),
     };
 
     const statusCounts = data.reduce((acc, item) => {
       const statusKey = item.status;
-      acc[statusKey] = (acc[statusKey] || 0) + 1;
+      // acc[statusKey] = (acc[statusKey] || 0) + 1;
+
+      if (!acc[statusKey]) {
+        acc[statusKey] = {
+          count: 0,
+          names: [],
+        };
+      }
+      acc[statusKey].count += 1;
+      acc[statusKey].names.push(item.prdName);
+
       return acc;
     }, {});
 
@@ -239,12 +250,12 @@ const Settings = () => {
       ([statusKey, count]) => ({
         key: statusKey,
         name: `${statusKey} (${count})`,
-        scnd: count,
+        count: count.count,
         fir: 0,
+        prdName: `${count.names}`,
       })
     );
 
-    // 전체 탭과 상태별 탭을 합쳐서 반환
     return [allTab, ...statusTabs];
   };
 
@@ -257,6 +268,8 @@ const Settings = () => {
           alignItems: "center",
           marginRight: "4rem",
           marginBottom: "1rem",
+          padding: "1rem 0",
+          gap: "2rem",
         }}
       >
         <span>site1</span>
@@ -278,8 +291,7 @@ const Settings = () => {
               display: "flex",
               gap: "10px",
               flexDirection: "column",
-              flex: "0 0 20%;",
-              maxWidth: "20rem",
+              maxWidth: "25rem",
               width: "100%",
             }}
           >
@@ -362,7 +374,8 @@ const Settings = () => {
                         style={{
                           margin: "0.3rem 0",
                           border: "1px solid gray",
-                          display: "flex",
+                          display: "grid",
+                          gridTemplateColumns: "auto 4% 20%",
                           justifyContent: "left",
                           padding: "0.7rem 1rem",
                           gap: "0rem 3rem",
@@ -374,7 +387,7 @@ const Settings = () => {
                       </li>
                     </>
                   );
-                })}{" "}
+                })}
               </ul>
             </Box>
 
@@ -397,14 +410,17 @@ const Settings = () => {
                       <li
                         key={index}
                         style={{
-                          margin: "1rem 0",
-                          border: "1px solid",
-                          display: "flex",
-                          justifyContent: "space-around",
-                          padding: "0.5rem",
+                          margin: "0.3rem 0",
+                          border: "1px solid gray",
+                          display: "grid",
+                          gridTemplateColumns: "auto 4% 20%",
+                          justifyContent: "left",
+                          padding: "0.7rem 1rem",
+                          gap: "0rem 3rem",
                         }}
                       >
                         <span>{mail.date}</span>
+                        <span>{mail.author}</span>
                         <span className="mail-desc">{mail.desc}</span>
                       </li>
                     </ul>

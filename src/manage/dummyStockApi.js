@@ -18,6 +18,13 @@ const dataMap = {
       suryou: 200,
       price: 80000,
     },
+    {
+      id: 1023,
+      prdName: "플로럴2",
+      status: "Instock",
+      suryou: 200,
+      price: 80000,
+    },
   ],
   arriving_soon: [
     {
