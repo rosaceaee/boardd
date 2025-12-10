@@ -29,6 +29,7 @@ import {
   Tabs,
   Theme,
   Drawer,
+  Avatar,
 } from "antd";
 
 import "./App.css";
@@ -39,6 +40,10 @@ import ManageStress from "./list/ManageStress";
 import RequestStock from "./compo/RequestStock";
 import SellManage from "./list/SellManage";
 import ListStock from "./list/ListStock";
+import Box from "./compo/Box.tsx";
+import { dummyMail } from "./list/dummyMail.js";
+import CustomDrawer from "./compo/CustomDrawer.tsx";
+
 // App.js
 
 import {
@@ -129,9 +134,15 @@ const FixedLayout = () => {
 
 function App() {
   const [open, setOpen] = useState(false);
+  const [listOpen, setListOpen] = useState("");
   const openthis = () => {
     setOpen((a) => !a);
   };
+  const openList = (name) => {
+    setListOpen(name);
+  };
+
+  const transferStates = { open, setOpen, listOpen, setListOpen, openList };
 
   return (
     <div className="App">
@@ -163,16 +174,48 @@ function App() {
         onClick={openthis}
       />
 
-      <Drawer
-        title="Basic Drawer"
-        placement="right"
-        open={open}
-        closable={false}
-        getContainer={false}
-      >
-        <p onClick={() => setOpen(false)}>close</p>
-        <p>Some contents...</p>
-      </Drawer>
+      {open && (
+        <Box
+          className="chat-listbox"
+          style={{ border: "1px solid red" }}
+          // onClick={() => setOpen(false)}
+        >
+          <div className="closeBtn" onClick={() => setOpen(false)}>
+            닫긔
+          </div>
+          <h1>Chat list</h1>
+          <Flex style={{ flexDirection: "column", gap: "1rem" }}>
+            {dummyMail.received.map((name, idx) => {
+              return (
+                <>
+                  <Box
+                    style={{ border: "1px solid red", padding: "1rem" }}
+                    className="box chat-list-box"
+                    key={idx}
+                    title={name.author}
+                    open={open}
+                    onClick={() => openList(name.author)}
+                  >
+                    <Avatar size={46} icon={<UserOutlined />} />
+                    {name.author}
+                    <div>{name.desc}</div>
+                  </Box>
+                  {listOpen === name.author && (
+                    <>
+                      <CustomDrawer
+                        title={name.author}
+                        transferStates={transferStates}
+                      />
+                    </>
+                  )}
+                </>
+              );
+            })}
+
+            <Button type="primary">send</Button>
+          </Flex>
+        </Box>
+      )}
     </div>
   );
 }
