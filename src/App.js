@@ -168,7 +168,7 @@ function App() {
         style={{
           position: "fixed",
           right: "1rem",
-          top: "1rem",
+          bottom: "1rem",
           fontSize: "5rem",
         }}
         onClick={openthis}

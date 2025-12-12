@@ -118,11 +118,87 @@
 
 .chat-detail {
   position: absolute;
-  border: 2px solid green;
+  border: 1px solid rgb(150, 140, 140);
   width: calc(100% - 2rem);
   height: 100%;
   background: rgb(255, 236, 196);
   z-index: 1;
+
+  .usr-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    border-bottom: 1px solid gray;
+    background: #fff;
+
+    .info-box {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .back {
+      // position: absolute;
+      // right: 0;
+      // top: 0;
+    }
+  }
+
+  .chat-wrap {
+    display: flex;
+    justify-content: flex-start;
+    gap: 1rem;
+    flex-direction: column;
+    padding-top: 2rem;
+    padding-bottom: 10rem;
+    margin-bottom: 10rem;
+    overflow: auto;
+    max-height: 100%;
+    height: 27rem;
+
+    .usr-chat-box {
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      gap: 1rem;
+      padding: 0 1rem;
+      // position: absolute;
+      // top: 0;
+      // background: #fff;
+    }
+    .bg {
+      background: #fff;
+      width: 100%;
+      height: 100%;
+      flex-shrink: 1;
+      flex-grow: 1;
+      text-align: left;
+      padding: 0 1rem !important;
+
+      &.sent {
+        text-align: right;
+      }
+    }
+  }
+  .textarea {
+    position: fixed;
+    bottom: 0;
+    display: flex;
+    justify-content: space-between;
+    width: calc(100% - 2rem);
+    max-width: 25rem;
+    max-height: 15rem;
+    flex-direction: column;
+    padding: 1rem 0;
+    background: #fff;
+
+    textarea {
+      height: 10rem;
+      margin-bottom: 1rem;
+    }
+  }
 }
 
 .ant-drawer-content-wrapper {

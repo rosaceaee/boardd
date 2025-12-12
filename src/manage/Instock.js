@@ -44,13 +44,25 @@ const columns = [
       let btn;
       switch (statusVal) {
         case "Instock":
-          btn = <Button type="primary">재고</Button>;
+          btn = (
+            <Button type="primary" variant="solid">
+              재고
+            </Button>
+          );
           break;
         case "ArrivingSoon":
-          btn = <Button type="default">ArrivingSoon</Button>;
+          btn = (
+            <Button color="purple" variant="solid">
+              ArrivingSoon
+            </Button>
+          );
           break;
         case "NoJaiko":
-          btn = <Button danger>jaikono</Button>;
+          btn = (
+            <Button color="pink" variant="solid">
+              jaikono
+            </Button>
+          );
           break;
         default:
           btn = <span>{statusVal}</span>;
@@ -163,7 +175,7 @@ const Instock = () => {
   return (
     <>
       <section style={{ minHeight: "100vh" }}>
-        <h2>입/출고 일람</h2>{" "}
+        <h2>입/출고 일람</h2>
         {/* <div style={{ display: "flex", marginLeft: "auto" }}>
           <Input
             placeholder="찾을 데이터 입력"
@@ -217,11 +229,12 @@ const Instock = () => {
                       </Button>
 
                       <Button
-                        type={
+                        color={
                           activeFilter === DATA_FILTERS.arriving_soon
-                            ? "primary"
-                            : "default"
+                            ? "purple"
+                            : ""
                         }
+                        variant="solid"
                         onClick={() =>
                           handleFilterClick(DATA_FILTERS.arriving_soon)
                         }
@@ -230,11 +243,10 @@ const Instock = () => {
                       </Button>
 
                       <Button
-                        type={
-                          activeFilter === DATA_FILTERS.reorder
-                            ? "primary"
-                            : "default"
+                        color={
+                          activeFilter === DATA_FILTERS.reorder ? "pink" : ""
                         }
+                        variant="solid"
                         onClick={() => handleFilterClick(DATA_FILTERS.reorder)}
                       >
                         Reoder

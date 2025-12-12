@@ -264,17 +264,22 @@ const Settings = () => {
       <header
         style={{
           display: "flex",
-          justifyContent: "flex-end",
+          justifyContent: "space-between",
           alignItems: "center",
-          marginRight: "4rem",
           marginBottom: "1rem",
-          padding: "1rem 0",
+          padding: "1rem 10rem 1rem 1rem",
           gap: "2rem",
         }}
       >
-        <span>site1</span>
-        <span>site1</span>
-        <span>site1</span>
+        <h1>Manage</h1>
+        <Flex style={{ gap: "3rem" }}>
+          <a href="" target="_blank">
+            Mall
+          </a>
+          <a href="" target="_blank">
+            Insta
+          </a>
+        </Flex>
       </header>
       <Content
         style={{ padding: "0", minHeight: "100vh" }}
