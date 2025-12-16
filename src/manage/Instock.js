@@ -17,6 +17,8 @@ import {
 import { FormProvider } from "rc-field-form";
 import { DATA_FILTERS } from "../manage/stockData";
 import { dummyStockApi } from "../manage/dummyStockApi";
+import { dummyZaikoApi } from "../manage/dummyZaikoApi";
+
 const initialState = [];
 
 const reducer = (state, action) => {
@@ -142,7 +144,7 @@ const Instock = () => {
       setTableData([]);
 
       try {
-        const data = await dummyStockApi(activeFilter);
+        const data = await dummyZaikoApi(activeFilter);
         setTableData(data);
       } catch (error) {
         console.error("error: call the data", error);

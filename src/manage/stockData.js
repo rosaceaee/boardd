@@ -1,6 +1,6 @@
 export const DATA_FILTERS = {
   all: "all",
-  stocks: "stocks",
+  instock: "instock",
   arriving_soon: "arriving_soon",
   reorder: "reorder",
   nokori: "nokori",
