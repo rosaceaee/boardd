@@ -3,6 +3,7 @@ import React, { useState, useEffect, useReducer, useMemo } from "react";
 import RequestStock from "../compo/RequestStock";
 import StockManage from "../list/StockManage";
 import ListStock from "../list/ListStock";
+import Order from "../sell/Order";
 
 import { SearchOutlined, InfoCircleTwoTone } from "@ant-design/icons";
 import {
@@ -199,6 +200,7 @@ const ExAntd = () => {
   };
   const items2 = [
     { key: "/requestStock", label: "입/출고 등록" },
+    { key: "/orderManage", label: "주문배송관리" },
     { key: "/listStock", label: "재고 현황 조회" },
     // { key: "/stockManage", label: "재고 분석" },
   ];
@@ -214,6 +216,9 @@ const ExAntd = () => {
         break;
       case "/stockManage":
         Component = <StockManage />;
+        break;
+      case "/orderManage":
+        Component = <Order />;
         break;
       default:
         Component = <div>404</div>;

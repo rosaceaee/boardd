@@ -3,6 +3,9 @@ import React, { useState, useEffect, useReducer, useMemo } from "react";
 import ReportSell from "../sell/ReportSell";
 import ManageMarketing from "../sell/ManageMarketing";
 import ManageShipping from "../sell/ManageShipping";
+import CsTemp from "../cs/CsTemp";
+import BoardCs from "../cs/BoardCs";
+
 import { SearchOutlined, InfoCircleTwoTone } from "@ant-design/icons";
 import {
   Layout,
@@ -54,7 +57,7 @@ const reducer = (state, action) => {
   }
 };
 
-// 차트 데이터
+//
 const generateChartData = (columns, dataSource, labelKey) => {
   const labels = dataSource.map((item) => item[labelKey]);
 
@@ -179,11 +182,21 @@ const SellManage = () => {
   const changeTabPosition = (e) => {
     setTabPosition(e.target.value);
   };
+  const navigate = useNavigate();
+  const handleTabChange = (key) => {
+    if (key === "/mail") {
+      navigate("/mail");
+    } else {
+      navigate(key);
+    }
+  };
+
   const items2 = [
     { key: "/ReportSell", label: "매출 현황 분석" },
     { key: "/ManageShipping", label: "주문/배송 관리" },
     // { key: "/ManageShipping", label: "상품 성과 분석" },
-    { key: "/sub12", label: "광고/마케팅 성과" },
+    { key: "/sellManage/mail", label: "메일" },
+    { key: "/sellManage/boardCs", label: "게시판문의" },
   ];
 
   const tabItems = items2.map((item) => {
@@ -195,8 +208,11 @@ const SellManage = () => {
       case "/ManageMarketing":
         Component = <ManageShipping />;
         break;
-      case "/ManageShipping":
-        Component = <ManageShipping />;
+      case "/sellManage/mail":
+        Component = <CsTemp />;
+        break;
+      case "/sellManage/boardCs":
+        Component = <boardCs />;
         break;
       default:
         Component = <div>404</div>;
@@ -211,22 +227,12 @@ const SellManage = () => {
 
   return (
     <Layout>
-      {/* <Sider width={200} trigger={null} collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
-        <Menu items={items} mode="inline" theme="dark" onClick={(a) => a} />
-      </Sider>       */}
       <Tabs
         tabPosition={tabPosition}
-        // items={Array.from({ length: 3 }).map((_, i) => {
-        //   const id = String(i + 1);
-        //   return {
-        //     label: `Tab ${id}`,
-        //     key: id,
-        //     children: `Content of Tab ${id}`,
-        //   };
-        // })}
         items={tabItems}
+        onChange={handleTabChange}
       />
-      <Content>셀매니지</Content>
+      <Content />
     </Layout>
   );
 };

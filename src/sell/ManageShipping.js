@@ -16,6 +16,7 @@ import {
 } from "antd";
 import Box from "../compo/Box.tsx";
 import Instock from "../manage/Instock";
+import Order from "./Order";
 
 const ManageShipping = () => {
   const [searchKeyword, setSearchKeyword] = useState("");
@@ -55,27 +56,26 @@ const ManageShipping = () => {
     {
       key: "1",
       label: "주문 관리",
-      children: <Instock />,
+      children: <Order />,
     },
-    {
-      key: "2",
-      label: "배송 관리",
-      children: "Content of Tab Pane 11",
-    },
+    // {
+    //   key: "2",
+    //   label: "배송 관리",
+    //   children: "Content of Tab Pane 11",
+    // },
   ];
   return (
     <>
       <section style={{ minHeight: "100vh" }}>
-        <h1> 주문/배송 관리(1~5)</h1>
-        <Box>
+        <h1> 주z문/배송 관리(1~5)</h1>
+        {/* <Box>
           <Flex style={{ justifyContent: "space-around" }}>
             <p>주문</p>
             <p>배송</p>
           </Flex>
-        </Box>
+        </Box> */}
 
         <Tabs items={tabItms} onChange={onChange} />
-        {/* <Bar data={chartData} /> */}
       </section>
     </>
   );

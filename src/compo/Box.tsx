@@ -7,7 +7,7 @@ interface BoxProps {
   children?: React.ReactNode;
   style?: React.CSSProperties;
   className: string;
-  padding: number;
+  // padding: number;
 }
 
 const Box = ({
@@ -16,7 +16,6 @@ const Box = ({
   children,
   style,
   widthh,
-  padding,
   className = "",
   ...rest
 }: BoxProps) => {
@@ -26,8 +25,7 @@ const Box = ({
       style={{
         width: `${widthh}px`,
         borderRadius: `${radius}px`,
-        background: "#ffffff",
-        padding: `${padding}rem`,
+        background: `#fff`,
         ...style,
       }}
       {...rest}

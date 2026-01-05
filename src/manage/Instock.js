@@ -13,10 +13,14 @@ import {
   Dropdown,
   Flex,
   Tabs,
+  InputNumber,
+  Popover,
 } from "antd";
 import { FormProvider } from "rc-field-form";
-import { DATA_FILTERS } from "../manage/stockData";
 import { dummyStockApi } from "../manage/dummyStockApi";
+import { dummyZaikoApi, DATA_FILTERS } from "../manage/dummyZaikoApi";
+import { inventoryApi } from "../api/inventoryApi";
+
 const initialState = [];
 
 const reducer = (state, action) => {
@@ -30,65 +34,7 @@ const reducer = (state, action) => {
   }
 };
 
-const columns = [
-  {
-    title: "제품명",
-    dataIndex: "prdName",
-    key: "prdName",
-  },
-  {
-    title: "현재 상태",
-    dataIndex: "status",
-    key: "status",
-    render: (statusVal) => {
-      let btn;
-      switch (statusVal) {
-        case "Instock":
-          btn = (
-            <Button type="primary" variant="solid">
-              재고
-            </Button>
-          );
-          break;
-        case "ArrivingSoon":
-          btn = (
-            <Button color="purple" variant="solid">
-              ArrivingSoon
-            </Button>
-          );
-          break;
-        case "NoJaiko":
-          btn = (
-            <Button color="pink" variant="solid">
-              jaikono
-            </Button>
-          );
-          break;
-        default:
-          btn = <span>{statusVal}</span>;
-      }
-      return btn;
-    },
-  },
-  {
-    title: "수량",
-    dataIndex: "suryou",
-    key: "suryou",
-    sorter: (a, b) => a.suryou - b.suryou,
-    render: (suryou) => suryou.toLocaleString(),
-    align: "right",
-  },
-  {
-    title: "가격 (원)",
-    dataIndex: "price",
-    key: "price",
-    sorter: (a, b) => a.price - b.price,
-    render: (price) => `${price.toLocaleString()} 원`,
-    align: "right",
-  },
-];
-
-const Instock = () => {
+const Instock = ({ onApplySuccess }) => {
   const [activeFilter, setActiveFilter] = useState(DATA_FILTERS.all);
   const [tableData, setTableData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -96,31 +42,10 @@ const Instock = () => {
   const [searchKeyword, setSearchKeyword] = useState("");
   const [cellData, dispatch] = useReducer(reducer, initialState);
   const [filteredData, setFilteredData] = useState([]);
-  const [currArea, setCurrArea] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [openId, setOpenId] = useState(null);
 
   const { Sider, Header, Content, Footer } = Layout;
-
-  const [input, setInput] = useState({
-    title: "",
-    fir: "",
-    scnd: "",
-  });
-
-  const onHeree = (a) => {
-    setCurrArea(currArea === a ? null : a);
-  };
-
-  const getBoxClassName = (boxId) => {
-    let className = "box";
-
-    if (currArea === boxId) {
-      className += " here";
-    } else if (currArea !== null) {
-      className += " hide";
-    }
-
-    return className;
-  };
 
   useEffect(() => {
     setFilteredData(cellData);
@@ -134,6 +59,7 @@ const Instock = () => {
 
   const handleFilterClick = (filterId) => {
     setActiveFilter(filterId);
+    setCurrentPage(1);
   };
 
   useEffect(() => {
@@ -142,8 +68,25 @@ const Instock = () => {
       setTableData([]);
 
       try {
-        const data = await dummyStockApi(activeFilter);
-        setTableData(data);
+        const data = await dummyZaikoApi(activeFilter);
+
+        // 🚨 핵심 수정: 테이블에 설정하기 전에 모든 데이터의 유효성을 검사합니다.
+        const cleanedData = data.filter((item) => {
+          // item 객체가 존재하고 (null/undefined 방지),
+          // id가 존재하며 (잘못된 병합 데이터 방지),
+          // price와 suryou가 undefined가 아님을 확인하여 toLocaleString 오류 방지
+          const isValid =
+            item &&
+            item.id !== undefined &&
+            item.price !== undefined &&
+            item.price !== null &&
+            item.suryou !== undefined &&
+            item.suryou !== null;
+
+          return isValid;
+        });
+
+        setTableData(cleanedData);
       } catch (error) {
         console.error("error: call the data", error);
       } finally {
@@ -154,59 +97,195 @@ const Instock = () => {
     fetchTableData();
   }, [activeFilter]);
 
-  const searchData = () => {
-    const keyword = searchKeyword.toLowerCase().trim();
-
-    if (keyword === "") {
-      setFilteredData(cellData);
-      return;
-    }
-
-    const filtered = cellData.filter(
-      (item) =>
-        item.title.toLowerCase().includes(keyword) ||
-        item.fir.toString().includes(keyword) ||
-        item.scnd.toString().includes(keyword)
-    );
-
-    setFilteredData(filtered);
+  const handleTableChange = (pagination) => {
+    setCurrentPage(pagination.current);
   };
+
+  const handleOpenChange = (newOpen, record) => {
+    if (newOpen) {
+      setOpenId(record.key);
+      setStep(1);
+      setNum(0);
+    } else {
+      setOpenId(null);
+    }
+  };
+
+  const hide = () => setOpenId(null);
+
+  const [step, setStep] = useState(1);
+  const [num, setNum] = useState(0);
+  const handleRequestApi = async (record) => {
+    const mappedData = {
+      key: record.id,
+      name: record.prdName,
+      count: num,
+      date: new Date().toLocaleString(),
+      status: "신청완료",
+    };
+
+    onApplySuccess(mappedData);
+    setStep(3);
+  };
+
+  const columns = [
+    {
+      title: "제품명",
+      dataIndex: "prdName",
+      key: "prdName",
+    },
+    {
+      title: "현재 상태",
+      dataIndex: "status",
+      key: "status",
+      render: (statusVal, record) => {
+        let btn;
+        switch (statusVal) {
+          case "Instock":
+            btn = (
+              <Button type="primary" variant="solid">
+                여유
+              </Button>
+            );
+            break;
+          case "ArrivingSoon":
+            btn = (
+              <Button color="purple" variant="solid">
+                재고 추가요청중
+              </Button>
+            );
+            break;
+          case "lowQ":
+            btn = (
+              <Popover
+                open={openId === record.id}
+                onOpenChange={(visible) => {
+                  setOpenId(visible ? record.id : null);
+                  setStep(1);
+                }}
+                content={
+                  <div style={{ minWidth: "200px" }}>
+                    {step === 1 && (
+                      <div>
+                        <p>
+                          재고가 부족합니다. 몇 개 신청할래?{record.prdName}{" "}
+                        </p>
+                        <p>숫자를 입력하거나 증감 버튼으로 조작 가넝</p>
+                        <InputNumber
+                          min={1}
+                          style={{ width: "100%", marginBottom: "10px" }}
+                          // onChange={(value) => setNum(value)}
+                          onChange={(v) => setNum(v || 0)}
+                        />
+                        <div
+                          style={{
+                            display: "flex",
+                            gap: "10px",
+                            marginTop: "10px",
+                          }}
+                        >
+                          <Button
+                            type="primary"
+                            onClick={() => setStep(2)}
+                            disabled={!num}
+                          >
+                            확인
+                          </Button>
+                          <Button type="text" onClick={hide}>
+                            취소
+                          </Button>
+                        </div>
+                      </div>
+                    )}
+
+                    {step === 2 && (
+                      <div>
+                        {/* <p>
+                          <strong>{num}개</strong> 맞아?
+                        </p>
+                        <div style={{ display: "flex", gap: "10px" }}>
+                          <Button type="primary" onClick={() => setStep(3)}>
+                            응, 맞아
+                          </Button>
+                          <Button onClick={() => setStep(1)}>
+                            아니, 수정할래
+                          </Button> </div> */}
+                        <strong>{num}개</strong> 맞아?
+                        <Button
+                          onClick={() => {
+                            console.log("전송 데이터:", record, num);
+                            onApplySuccess({
+                              id: record.id,
+                              name: record.prdName,
+                              amount: num,
+                            });
+                            setStep(3);
+                          }}
+                        >
+                          전송
+                        </Button>{" "}
+                        <Button onClick={() => setStep(1)}>
+                          아니, 수정할래
+                        </Button>
+                      </div>
+                    )}
+
+                    {step === 3 && (
+                      <div style={{ textAlign: "center" }}>
+                        <p>
+                          {" "}
+                          {num}개 신청 완료. <br /> 상세내역은 다음 탭에서 확인
+                        </p>
+                        <Button type="primary" onClick={hide}>
+                          닫기
+                        </Button>
+                      </div>
+                    )}
+                  </div>
+                }
+                title="상태 변경"
+                trigger="click"
+                // open={openId === record.key}
+                // onOpenChange={(newOpen) => handleOpenChange(newOpen, record)}
+              >
+                <Button color="pink" variant="solid">
+                  재고없음
+                </Button>
+              </Popover>
+            );
+            break;
+          default:
+            btn = <span>{statusVal}</span>;
+        }
+        return btn;
+      },
+    },
+    {
+      title: "수량",
+      dataIndex: "suryou",
+      key: "suryou",
+      sorter: (a, b) => a.suryou - b.suryou,
+      render: (suryou) => suryou.toLocaleString(),
+      align: "right",
+    },
+    {
+      title: "가격 (원)",
+      dataIndex: "price",
+      key: "price",
+      sorter: (a, b) => a.price - b.price,
+      render: (price) => `${price.toLocaleString()} 원`,
+      align: "right",
+    },
+  ];
 
   return (
     <>
       <section style={{ minHeight: "100vh" }}>
         <h2>입/출고 일람</h2>
-        {/* <div style={{ display: "flex", marginLeft: "auto" }}>
-          <Input
-            placeholder="찾을 데이터 입력"
-            type="text"
-            onChange={(e) => setSearchKeyword(e.target.value)}
-          />
-          <Button
-            type="primary"
-            shape="circle"
-            icon={<SearchOutlined />}
-            onClick={searchData}
-          />
-        </div> */}
+
         <Row className="wrapp" style={{ flexDirection: "row" }}>
-          <Col
-            size={12}
-            style={{ width: "100%" }}
-            className={getBoxClassName("instock")}
-            onClick={() => onHeree("instock")}
-          >
+          <Col size={12} style={{ width: "100%" }}>
             <Flex style={{ flexDirection: "column" }}>
-              {/* <Col>
-                <Space
-                  direction="horizontal"
-                  style={{ marginBottom: "20px" }}
-                  id="instock-area"
-                >
-                  <InputElWrap />
-                  <Button type="primary">추가</Button>
-                </Space>
-              </Col> */}
               <Col style={{ marginTop: "1rem" }}>
                 <div
                   style={{
@@ -219,37 +298,46 @@ const Instock = () => {
                     <div style={{ display: "flex", gap: "1rem" }}>
                       <Button
                         type={
-                          activeFilter === DATA_FILTERS.stocks
+                          activeFilter === DATA_FILTERS.all
                             ? "primary"
                             : "default"
                         }
-                        onClick={() => handleFilterClick(DATA_FILTERS.stocks)}
+                        onClick={() => handleFilterClick(DATA_FILTERS.all)}
                       >
-                        Stocks
+                        All
                       </Button>
 
                       <Button
-                        color={
-                          activeFilter === DATA_FILTERS.arriving_soon
-                            ? "purple"
-                            : ""
+                        type={
+                          activeFilter === DATA_FILTERS.perfume
+                            ? "primary"
+                            : "default"
                         }
-                        variant="solid"
-                        onClick={() =>
-                          handleFilterClick(DATA_FILTERS.arriving_soon)
-                        }
+                        onClick={() => handleFilterClick(DATA_FILTERS.perfume)}
                       >
-                        Arriving soon
+                        Perfume
                       </Button>
 
                       <Button
-                        color={
-                          activeFilter === DATA_FILTERS.reorder ? "pink" : ""
+                        type={
+                          activeFilter === DATA_FILTERS.body
+                            ? "primary"
+                            : "default"
                         }
-                        variant="solid"
-                        onClick={() => handleFilterClick(DATA_FILTERS.reorder)}
+                        onClick={() => handleFilterClick(DATA_FILTERS.body)}
                       >
-                        Reoder
+                        Body
+                      </Button>
+
+                      <Button
+                        type={
+                          activeFilter === DATA_FILTERS.candle
+                            ? "primary"
+                            : "default"
+                        }
+                        onClick={() => handleFilterClick(DATA_FILTERS.candle)}
+                      >
+                        Candle
                       </Button>
                     </div>
                   </div>
@@ -263,6 +351,7 @@ const Instock = () => {
                 <Table
                   columns={columns}
                   dataSource={tableData}
+                  rowKey="id"
                   // dataSource={filteredData.map((item, idx) => ({
                   //   ...item,
                   //   key: idx,
@@ -270,7 +359,11 @@ const Instock = () => {
                   // onRow={(record, rowIndex) => ({
                   //   onClick: () => deleteRow(rowIndex),
                   // })}
-                  pagination={true}
+                  pagination={{
+                    current: currentPage,
+                    onChange: (page, pageSize) =>
+                      handleTableChange({ current: page, pageSize: pageSize }),
+                  }}
                 />
 
                 <Button type="primary">pdf download</Button>

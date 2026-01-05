@@ -2,9 +2,11 @@ import React, { useState, useEffect, useReducer, useMemo } from "react";
 import Box from "../compo/Box.tsx";
 import CircleBox from "../compo/CircleBox.tsx";
 import RequestStock from "../compo/RequestStock";
-import TabsSummary from "../compo/TabsSummary";
-import { DATA_FILTERS } from "../manage/stockData";
+import GraphDashboard from "../compo/GraphDashboard";
+
+// import { DATA_FILTERS } from "../manage/stockData";
 import { dummyStockApi } from "../manage/dummyStockApi";
+import { dummyZaikoApi, DATA_FILTERS } from "../manage/dummyZaikoApi";
 
 import { SearchOutlined, InfoCircleTwoTone } from "@ant-design/icons";
 import {
@@ -28,7 +30,6 @@ import { UserOutlined } from "@ant-design/icons";
 
 import { dummyMail } from "./dummyMail.js";
 
-import { Bar } from "react-chartjs-2";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -61,7 +62,6 @@ const reducer = (state, action) => {
   }
 };
 
-// 차트 데이터
 const generateChartData = (columns, dataSource, labelKey) => {
   const labels = dataSource.map((item) => item[labelKey]);
 
@@ -107,10 +107,20 @@ const Settings = () => {
   const [tabButtons, setTabButtons] = useState([]);
   const [tableData, setTableData] = useState([]);
 
+  const [activeKey, setActiveKey] = useState(DATA_FILTERS.perfume);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await dummyZaikoApi(activeKey);
+      setTableData(data);
+    };
+    fetchData();
+  }, [activeKey]);
+
   useEffect(() => {
     const fetchAndProcessData = async () => {
       try {
-        const rawData = await dummyStockApi(DATA_FILTERS.all);
+        const rawData = await dummyZaikoApi(DATA_FILTERS.all);
         setTableData(rawData);
 
         const processedTabs = processDataForTabs(rawData);
@@ -120,7 +130,7 @@ const Settings = () => {
           setSum(processedTabs[0].key);
         }
       } catch (error) {
-        console.error("데이터 처리 오류:", error);
+        console.error(error);
       } finally {
       }
     };
@@ -219,8 +229,6 @@ const Settings = () => {
     setSum(key);
   };
 
-  const activeContent = sumNum.find((item) => item.key === sum);
-
   const processDataForTabs = (data) => {
     const allTab = {
       key: "all",
@@ -273,9 +281,7 @@ const Settings = () => {
       >
         <h1>Manage</h1>
         <Flex style={{ gap: "3rem" }}>
-          <a href="" target="_blank">
-            Mall
-          </a>
+          <a href="sellManage/mail">Mall</a>
           <a href="" target="_blank">
             Insta
           </a>
@@ -326,21 +332,46 @@ const Settings = () => {
               <Box
                 radius={15}
                 className="box"
-                style={{ maxWidth: "100%", flex: "1", height: "100%" }}
+                style={{
+                  maxWidth: "100%",
+                  flex: "1",
+                  height: "100%",
+                  background: "#fff",
+                }}
               >
-                <h2>재고 추이</h2>
-
+                <div className="summ-wrap main" style={{ display: "flex" }}>
+                  <Box className="tit" radius={15} widthh={130}>
+                    <p className="txt">오늘 매출</p>
+                    <p className="num">1개</p>
+                  </Box>
+                  <Box className="tit" radius={15} widthh={130}>
+                    <p className="txt">주문 건수</p>
+                    <p className="num">1개</p>
+                  </Box>
+                  <Box className="tit" radius={15} widthh={130}>
+                    <p className="txt">품절상품 수</p>
+                    <p className="num">1개</p>
+                  </Box>
+                </div>
                 <Box className="box summary">
-                  <TabsSummary
+                  {/* <GraphDashboard
                     tabData={tabButtons}
                     activeKey={sum}
                     onTabChange={clicksumNum}
                     activeContent={tabButtons.find((item) => item.key === sum)}
-                  />
-                </Box>
+                  /> */}
+                  {tableData.length > 0 ? (
+                    <GraphDashboard
+                      activeKey={activeKey}
+                      activeDetailData={tableData}
+                    />
+                  ) : (
+                    <div>데이터를 로드 중입니다...</div>
+                  )}
+                </Box>{" "}
               </Box>
 
-              <Box
+              {/* <Box
                 radius={15}
                 className="box"
                 style={{ maxWidth: "100%", flex: "1", height: "100%" }}
@@ -355,7 +386,7 @@ const Settings = () => {
                     activeContent={tabButtons.find((item) => item.key === sum)}
                   />
                 </Box>
-              </Box>
+              </Box> */}
             </Flex>
 
             <Box
