@@ -1,74 +1,33 @@
-// .box {
-//   width: 100%;
-//   max-width: 35rem;
-//   height: 200px;
-//   border: 2px solid #333;
-// }
-
-// .left-side {
-//   margin-left: 0rem;
-//   border-top-left-radius: 2rem;
-//   margin-top: 1rem;
-//   margin-bottom: 1rem;
-// }
-
-// .right-side {
-//   padding: 1rem;
-//   min-height: 100vh;
-//   position: relative;
-//   left: -4rem;
-//   background: #515139;
-//   margin: 0rem 0;
-//   border-radius: 4rem;
-//   width: 100%;
-//   margin-top: 12px;
-//   min-width: 1440px;
-// }
-
 $drkgrn: #79ae92;
 $lggrn: #8aae9b;
+$fff: #ffffff;
+$ccc: #cccccc;
+
 @mixin bg-drkgrn {
   background: #79ae92;
 }
 
+.wrapp {
+  min-height: 100vh;
+  padding: 0;
+  height: calc(100vh - 20px);
+  overflow: auto;
+  justify-content: space-around;
+}
+
+// component - box
 .box {
+  padding: 2rem;
+  &.profile {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+  }
   &.summary {
     width: 100%;
     padding: 1rem 3rem 3rem;
-    // display: flex;
-    // .left {
-    //   display: flex;
-    //   flex-direction: column;
-    //   gap: 1rem;
-    //   padding: 0.4rem;
-    //   &.active {
-    //     background: #fff;
-    //     border-top: 1px solid red;
-    //     border-bottom: 1px solid red;
-    //     position: relative;
-    //     &:before {
-    //       content: "";
-    //       position: absolute;
-    //       right: -13px;
-    //       top: 0;
-    //       height: 31px;
-    //       width: 1rem;
-    //       z-index: 1;
-    //       background: #fff;
-    //     }
-    //   }
-
-    //   .selector {
-    //     display: flex;
-    //     align-items: center;
-
-    //     &.active {
-    //       background: #fff;
-    //       border-top: 1px solid red;
-    //       border-bottom: 1px solid red;
-    //     }
-    //   }
-    // }
 
     .right {
       position: relative;
@@ -78,6 +37,16 @@ $lggrn: #8aae9b;
       border-top: 1px solid red;
       border-bottom: 1px solid red;
       border-left: 1px solid red;
+    }
+  }
+
+  &.cs-msg-summary {
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    .tit {
+      text-align: left;
     }
   }
 
@@ -113,7 +82,7 @@ $lggrn: #8aae9b;
   padding: 0 !important;
 }
 
-//chat
+// chat
 .chat-listbox {
   border-bottom: 1px solid #ccc;
   padding: 1rem;
@@ -153,12 +122,6 @@ $lggrn: #8aae9b;
       align-items: center;
       gap: 1rem;
     }
-
-    .back {
-      // position: absolute;
-      // right: 0;
-      // top: 0;
-    }
   }
 
   .chat-wrap {
@@ -179,14 +142,10 @@ $lggrn: #8aae9b;
       align-items: center;
       gap: 1rem;
       padding: 0 1rem;
-      // position: absolute;
-      // top: 0;
-      // background: #fff;
     }
     .bg {
       background: #fff;
       width: 100%;
-
       flex-shrink: 1;
       flex-grow: 1;
       text-align: left;
@@ -197,6 +156,7 @@ $lggrn: #8aae9b;
       }
     }
   }
+
   .textarea {
     position: fixed;
     bottom: 0;
@@ -234,7 +194,29 @@ $lggrn: #8aae9b;
   cursor: pointer;
 }
 
+// 메인 - 재고 요약보드
 .summ-wrap {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  max-width: 120rem;
+  width: calc(100% - 4rem);
+  margin-bottom: 1rem;
+  padding: 10px;
+  cursor: pointer;
+  .tit {
+    font-size: 1.05rem;
+  }
+  .num {
+    font-size: 1rem;
+  }
+  div {
+    &:hover {
+      background: #333 !important;
+      color: #fff !important;
+    }
+  }
+
   &.main {
     display: flex;
     justify-content: space-around;
@@ -246,7 +228,7 @@ $lggrn: #8aae9b;
 
     .tit {
       font-size: 1.2rem;
-      border: 1px solid #79ae92;
+      border: 1px solid $drkgrn;
       padding: 0rem 0px 1rem;
       display: flex;
       flex-direction: column;
@@ -256,7 +238,7 @@ $lggrn: #8aae9b;
     .txt {
       font-weight: 600;
       font-size: 1rem;
-      background-color: #79ae92 !important;
+      background-color: $drkgrn !important;
       padding: 0.8rem 0;
       border-top-left-radius: 15px;
       border-top-right-radius: 15px;
@@ -283,6 +265,7 @@ $lggrn: #8aae9b;
     padding: 1rem;
     @include bg-drkgrn;
   }
+
   .list {
     display: flex;
     flex-direction: column;
@@ -294,6 +277,24 @@ $lggrn: #8aae9b;
   }
 }
 
+// 메인 - 메일 메시지 영역
+.main-mailbox {
+  .mail-sect {
+    margin: 1rem 0;
+    display: grid;
+    grid-template-columns: auto 4% auto;
+    justify-content: left;
+    padding: 0.8rem 1rem;
+    gap: 0 3rem;
+    border: 1px solid #ddd;
+  }
+  .mail-desc {
+    width: 100%;
+  }
+}
+//////메인 끝.
+
+// cs - 메일 답장 모달영역
 .mail-reply-wrap {
   .mail-body {
     margin: 1rem 0 2rem;
