@@ -1,84 +1,48 @@
-export const DATA_FILTERS = {
-  all: "all",
-  perfume: "perfume",
-  body: "body",
-  candle: "candle",
-};
-
 const dataMap = {
   perfume: [
     {
       floral: [
         {
-          id: "perfume1",
-          prdName: "플로럴1",
+          id: "p1",
+          prdName: "Midnight Floral",
           status: "Instock",
-          suryou: 50,
-          price: 1500000,
+          suryou: 45,
+          price: 150000,
+          haisouStat: "haisou",
+          history: [
+            { date: "2025-12-25", suryou: 50 },
+            { date: "2025-12-26", suryou: 48 },
+            { date: "2025-12-27", suryou: 45 },
+          ],
         },
         {
-          id: "perfume2",
-          prdName: "플로럴2",
+          id: "p2",
+          prdName: "Spring Bloom",
           status: "Instock",
-          suryou: 50,
-          price: 1500000,
-        },
-        {
-          id: "perfume3",
-          prdName: "플로럴3",
-          status: "Instock",
-          suryou: 50,
-          price: 1500000,
+          suryou: 12,
+          price: 120000,
+          haisouStat: "haisouing",
+
+          history: [
+            { date: "2025-12-25", suryou: 20 },
+            { date: "2025-12-26", suryou: 15 },
+            { date: "2025-12-27", suryou: 12 },
+          ],
         },
       ],
-    },
-    {
-      clean: [
-        {
-          id: "perfume1",
-          prdName: "클린1",
-          status: "ArrivingSoon",
-          suryou: 50,
-          price: 1500000,
-        },
-        {
-          id: "perfume2",
-          prdName: "클린2",
-          status: "Instock",
-          suryou: 50,
-          price: 1500000,
-        },
-        {
-          id: "perfume3",
-          prdName: "클린3",
-          status: "Instock",
-          suryou: 50,
-          price: 1500000,
-        },
-      ],
-    },
-    {
       woody: [
         {
-          id: "perfume1",
-          prdName: "우디1",
-          status: "Instock",
-          suryou: 50,
-          price: 1500000,
-        },
-        {
-          id: "perfume2",
-          prdName: "우디2",
+          id: "p3",
+          prdName: "Deep Forest",
           status: "ArrivingSoon",
-          suryou: 50,
-          price: 1500000,
-        },
-        {
-          id: "perfume3",
-          prdName: "우디3",
-          status: "Instock",
-          suryou: 50,
-          price: 1500000,
+          haisouStat: "haisou",
+          suryou: 5,
+          price: 180000,
+          history: [
+            { date: "2025-12-25", suryou: 8 },
+            { date: "2025-12-26", suryou: 7 },
+            { date: "2025-12-27", suryou: 5 },
+          ],
         },
       ],
     },
@@ -87,73 +51,87 @@ const dataMap = {
     {
       hair: [
         {
-          id: 101,
-          cate: "wash",
-          prdName: "플로럴1",
-          suryou: 50,
-          price: 1500000,
-        },
-        {
-          id: 2,
-          cate: "treatment",
-          prdName: "222",
-          suryou: 50,
-          price: 1500000,
+          id: "b1",
+          prdName: "Silk Shampoo",
+          status: "lowQ",
+          suryou: 80,
+          price: 45000,
+          haisouStat: "haisoued",
+
+          history: [
+            { date: "2025-12-25", suryou: 85 },
+            { date: "2025-12-26", suryou: 82 },
+            { date: "2025-12-27", suryou: 80 },
+          ],
         },
       ],
       hand: [
         {
-          id: 101,
-          cate: "wash",
-          prdName: "플로럴1",
-          suryou: 50,
-          price: 1500000,
-        },
-        {
-          id: 2,
-          cate: "treatment",
-          prdName: "222",
-          suryou: 50,
-          price: 1500000,
+          id: "b2",
+          prdName: "Velvet Cream Treatment",
+          status: "Instock",
+          suryou: 3,
+          price: 28000,
+          haisouStat: "haisouReady",
+
+          history: [
+            { date: "2025-12-25", suryou: 10 },
+            { date: "2025-12-26", suryou: 5 },
+            { date: "2025-12-27", suryou: 3 },
+          ],
         },
       ],
     },
   ],
   candle: [
+    // 캔들은 depth가 하나 적은 구조일 경우
     {
-      id: 101,
-      prdName: "플로럴1",
+      id: "c1",
+      prdName: "Warm Cotton",
       status: "Instock",
-      suryou: 50,
-      price: 1500000,
-    },
-    {
-      id: 102,
-      prdName: "플로럴1",
-      status: "Instock",
-      suryou: 50,
-      price: 1500000,
+      suryou: 25,
+      price: 35000,
+      haisouStat: "haisouReady",
+
+      history: [
+        { date: "2025-12-25", suryou: 30 },
+        { date: "2025-12-26", suryou: 28 },
+        { date: "2025-12-27", suryou: 25 },
+      ],
     },
   ],
 };
 
-export const dummyZaikoApi = (status) => {
-  let data;
+export const DATA_FILTERS = {
+  all: "all",
+  perfume: "perfume",
+  body: "body",
+  candle: "candle",
+};
 
-  if (status === DATA_FILTERS.all) {
-    // Flatten all data from dataMap
-    data = Object.values(dataMap).flatMap((category) =>
-      Array.isArray(category)
-        ? category.flatMap((item) => Object.values(item).flat())
-        : []
+const flattenCategory = (categoryData) => {
+  if (!categoryData) return [];
+
+  if (Array.isArray(categoryData) && categoryData[0]?.prdName)
+    return categoryData;
+
+  return categoryData.flatMap((subGroup) => {
+    return Object.values(subGroup).flat();
+  });
+};
+
+export const dummyZaikoApi = (categoryKey) => {
+  let processedData = [];
+
+  if (categoryKey === DATA_FILTERS.all) {
+    processedData = Object.keys(dataMap).flatMap((key) =>
+      flattenCategory(dataMap[key])
     );
   } else {
-    data = dataMap[status] || [];
+    processedData = flattenCategory(dataMap[categoryKey]);
   }
 
   return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve(data);
-    }, 50);
+    setTimeout(() => resolve(processedData), 100);
   });
 };

@@ -43,6 +43,10 @@ import ListStock from "./list/ListStock";
 import Box from "./compo/Box.tsx";
 import { dummyMail } from "./list/dummyMail.js";
 import CustomDrawer from "./compo/CustomDrawer.tsx";
+import NewChat from "./compo/NewChat";
+import CsTemp from "./cs/CsTemp";
+import Mail from "./cs/Mail";
+import BoardCs from "./cs/BoardCs";
 
 // App.js
 
@@ -62,8 +66,8 @@ const SidebarMenu = () => {
 
   const items = [
     { key: "/", icon: <BarChartOutlined />, label: "summary" },
-    { key: "/stress", icon: <UserOutlined />, label: "재고관리" },
-    { key: "/sellManage", icon: <FileTextOutlined />, label: "매출관리" },
+    { key: "/stress", icon: <FileTextOutlined />, label: "재고관리" },
+    { key: "/sellManage", icon: <UserOutlined />, label: "고객관리" },
     { key: "/usrpage", icon: <UserOutlined />, label: "User Page (중첩)" },
   ];
 
@@ -141,8 +145,27 @@ function App() {
   const openList = (name) => {
     setListOpen(name);
   };
+  const closeParentModal = () => {
+    setOpen(false);
+    setListOpen("");
+  };
 
   const transferStates = { open, setOpen, listOpen, setListOpen, openList };
+  const newChat = (name) => {
+    // alert("y");
+    setListOpen("some");
+  };
+
+  const handleClose = () => {
+    setListOpen("");
+  };
+
+  const contactOptions = Array.from(
+    new Set(dummyMail.received.map((item) => item.author))
+  ).map((author) => ({
+    label: author,
+    value: author,
+  }));
 
   return (
     <div className="App">
@@ -157,8 +180,16 @@ function App() {
             <Route path="part/*" element={<RequestStock />} />
             <Route path="settings/*" element={<Settings />} />
             <Route path="usrpage/*" element={<UserPage />} />
-            <Route path="sellmanage/*" element={<SellManage />} />
+            <Route path="sellmanage" element={<SellManage />} />
+            <Route path="mail" element={<CsTemp />} />
+            {/* <Route path="mail" element={<Mail />} /> */}
+            <Route path="boardcs" element={<BoardCs />} />
 
+            <Route path="/sellManage" element={<SellManage />}>
+              <Route index element={<SellManage />} />
+              <Route path="mail" element={<Mail />} />
+              <Route path="boardCs" element={<BoardCs />} />
+            </Route>
             <Route path="*" element={<div>404 Page Not Found</div>}></Route>
           </Route>
         </Routes>
@@ -180,31 +211,41 @@ function App() {
           style={{ border: "1px solid red" }}
           // onClick={() => setOpen(false)}
         >
-          <div className="closeBtn" onClick={() => setOpen(false)}>
-            닫긔
+          <div className="closeBtn" onClick={closeParentModal}>
+            close
           </div>
-          <h1>Chat list</h1>
+          <h1 style={{ margin: "1rem auto 2rem" }}>Chat list</h1>
           <Flex style={{ flexDirection: "column", gap: "1rem" }}>
             {dummyMail.received.map((name, idx) => {
               return (
                 <>
                   <Box
-                    style={{ border: "1px solid red", padding: "1rem" }}
+                    style={{ padding: "1rem 10px" }}
                     className="box chat-list-box"
                     key={idx}
                     title={name.author}
                     open={open}
-                    onClick={() => openList(name.author)}
+                    // onClick={() => openList(name.author)}
+                    onClick={() => {
+                      if (listOpen === name.author) {
+                        setListOpen("");
+                      } else {
+                        setListOpen(name.author);
+                      }
+                    }}
                   >
                     <Avatar size={46} icon={<UserOutlined />} />
                     {name.author}
-                    <div>{name.desc}</div>
+                    <div className="desc">{name.desc}</div>
                   </Box>
+                  {/* // */}
+                  {/* 대화 이너 */}
                   {listOpen === name.author && (
                     <>
                       <CustomDrawer
                         title={name.author}
                         transferStates={transferStates}
+                        onClose={handleClose}
                       />
                     </>
                   )}
@@ -212,7 +253,17 @@ function App() {
               );
             })}
 
-            <Button type="primary">send</Button>
+            <Button type="primary" onClick={() => newChat("some")}>
+              New Chat
+            </Button>
+            {listOpen === "some" && (
+              <NewChat
+                title="새 채팅 시작"
+                options={contactOptions}
+                onClose={handleClose}
+                transferStates={transferStates}
+              />
+            )}
           </Flex>
         </Box>
       )}

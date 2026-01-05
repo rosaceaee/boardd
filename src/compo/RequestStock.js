@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useReducer, useMemo } from "react";
 import Instock from "../manage/Instock";
 import Outstock from "../manage/Outstock";
+import { inventoryApi } from "../api/inventoryApi";
 import { SearchOutlined, InfoCircleTwoTone } from "@ant-design/icons";
 import {
   Layout,
@@ -17,9 +18,6 @@ import {
   Tabs,
 } from "antd";
 
-import { useNavigate } from "react-router-dom";
-
-import { Bar } from "react-chartjs-2";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -69,108 +67,28 @@ const generateChartData = (columns, dataSource, labelKey) => {
   return { labels, datasets };
 };
 
-const columns = [
-  { title: "범례", dataIndex: "title", key: "title" },
-  {
-    title: "하나",
-    dataIndex: "fir",
-    key: "fir",
-    sorter: (a, b) => a.fir - b.fir,
-  },
-  {
-    title: "둘",
-    dataIndex: "scnd",
-    key: "scnd",
-    sorter: (a, b) => a.scnd - b.scnd,
-  },
-];
 const RequestStock = () => {
-  const [chkDeleteModal, setChkDeleteModal] = useState(false);
-  const [selectedRow, setSelectedRow] = useState(null);
-  const [searchKeyword, setSearchKeyword] = useState("");
   const [cellData, dispatch] = useReducer(reducer, initialState);
   const [filteredData, setFilteredData] = useState([]);
-  const [tabPosition, setTabPosition] = useState("left");
+  const [stockRequests, setStockRequests] = useState([]);
+  const [finalNum, setFinalNum] = useState(0);
 
-  const [input, setInput] = useState({
-    title: "",
-    fir: "",
-    scnd: "",
-  });
+  const handleApplySuccess = (data) => {
+    console.log("data.count");
+    setFinalNum(data.count);
+  };
+
+  const handleAddRequest = (newRequest) => {
+    // 기존 리스트에 새 신청 건 추갸ㄱ
+    setStockRequests((prev) => [...prev, newRequest]);
+  };
 
   useEffect(() => {
     setFilteredData(cellData);
   }, [cellData]);
 
-  useEffect(() => {
-    if (searchKeyword.trim() === "") {
-      setFilteredData(cellData);
-    }
-  }, [searchKeyword, cellData]);
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setInput((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const addRow = () => {
-    if (input.title && input.fir && input.scnd) {
-      dispatch({
-        type: "add",
-        payload: {
-          title: input.title,
-          fir: Number(input.fir),
-          scnd: Number(input.scnd),
-        },
-      });
-      setInput({ title: "", fir: "", scnd: "" });
-    } else {
-      alert("값을 모두 입력해주세요.");
-    }
-  };
-
-  const deleteRow = (index) => {
-    setSelectedRow({ ...cellData[index], index });
-    setChkDeleteModal(true);
-  };
-
-  const confirmDelete = () => {
-    dispatch({ type: "delete", index: selectedRow.index });
-    setChkDeleteModal(false);
-    setSelectedRow(null);
-  };
-
-  const cancelDelete = () => {
-    setChkDeleteModal(false);
-    setSelectedRow(null);
-  };
-
-  const searchData = () => {
-    const keyword = searchKeyword.toLowerCase().trim();
-
-    if (keyword === "") {
-      setFilteredData(cellData);
-      return;
-    }
-
-    const filtered = cellData.filter(
-      (item) =>
-        item.title.toLowerCase().includes(keyword) ||
-        item.fir.toString().includes(keyword) ||
-        item.scnd.toString().includes(keyword)
-    );
-
-    setFilteredData(filtered);
-  };
-
-  const { Sider, Header, Content, Footer } = Layout;
-  // 차트 데이터 생성 labelKey-> "title"
-  const chartData = useMemo(
-    () => generateChartData(columns, filteredData, "title"),
-    [filteredData]
-  );
   const onChange = (key) => {
-    console.log(key);
+    // console.log(key);
   };
 
   const items2 = [
@@ -200,169 +118,24 @@ const RequestStock = () => {
       children: Component,
     };
   });
+
   const tabItms = [
     {
       key: "1",
-      label: "입/출고 일람      ",
-      children: <Instock />,
+      label: "입/출고 일람",
+      children: <Instock onApplySuccess={handleAddRequest} />,
     },
     {
       key: "2",
-      label: "노코리 일람",
-      children: <Outstock />,
+      label: "재고 신청 현황",
+      children: <Outstock data={stockRequests} />,
     },
   ];
+
   return (
     <>
       <section style={{ minHeight: "100vh" }}>
         <Tabs items={tabItms} onChange={onChange} />
-        {/* <Row className="wrapp">
-          <Col size={24} style={{ border: "2px solid red", width: "100%" }}>
-            <Flex style={{ flexDirection: "column" }}>
-              <Col>
-                <Space direction="horizontal" style={{ marginBottom: "20px" }}>
-                  {" "}
-                  <h2>입/출고 등록</h2>{" "}
-                  <Input
-                    placeholder="partt"
-                    name="title"
-                    value={input.title}
-                    onChange={handleChange}
-                    style={{ width: 120 }}
-                  />
-                  <Input
-                    placeholder="cell1"
-                    name="fir"
-                    type="number"
-                    value={input.fir}
-                    onChange={handleChange}
-                    style={{ width: 100 }}
-                  />
-                  <Input
-                    placeholder="cell2"
-                    name="scnd"
-                    type="number"
-                    value={input.scnd}
-                    onChange={handleChange}
-                    style={{ width: 100 }}
-                  />
-                  <Button type="primary" onClick={addRow}>
-                    추가
-                  </Button>
-                </Space>
-
-                <Space style={{ marginBottom: "20px", padding: "20px" }}>
-                  <div style={{ display: "flex", marginLeft: "auto" }}>
-                    <Input
-                      placeholder="찾을 데이터 입력"
-                      type="text"
-                      onChange={(e) => setSearchKeyword(e.target.value)}
-                    />
-                    <Button
-                      type="primary"
-                      shape="circle"
-                      icon={<SearchOutlined />}
-                      onClick={searchData}
-                    />
-                  </div>
-                </Space>
-              </Col>
-
-              <Col style={{ marginTop: "1rem" }}>
-                <Table
-                  columns={columns}
-                  dataSource={filteredData.map((item, idx) => ({
-                    ...item,
-                    key: idx,
-                  }))}
-                  onRow={(record, rowIndex) => ({
-                    onClick: () => deleteRow(rowIndex),
-                  })}
-                  pagination={true}
-                />
-              </Col>
-            </Flex>
-          </Col>
-
-          <Col size={24} style={{ border: "2px solid red", width: "100%" }}>
-            <h2>출고 관리</h2>{" "}
-            <Flex style={{ flexDirection: "column" }}>
-              <Col>
-                <Space direction="horizontal" style={{ marginBottom: "20px" }}>
-                  <Input
-                    placeholder="범례"
-                    name="title"
-                    value={input.title}
-                    onChange={handleChange}
-                    style={{ width: 120 }}
-                  />
-                  <Input
-                    placeholder="cell1"
-                    name="fir"
-                    type="number"
-                    value={input.fir}
-                    onChange={handleChange}
-                    style={{ width: 100 }}
-                  />
-                  <Input
-                    placeholder="cell2"
-                    name="scnd"
-                    type="number"
-                    value={input.scnd}
-                    onChange={handleChange}
-                    style={{ width: 100 }}
-                  />
-                  <Button type="primary" onClick={addRow}>
-                    추가
-                  </Button>
-                </Space>
-
-                <Space style={{ marginBottom: "20px", padding: "20px" }}>
-                  <div style={{ display: "flex", marginLeft: "auto" }}>
-                    <Input
-                      placeholder="찾을 데이터 입력"
-                      type="text"
-                      onChange={(e) => setSearchKeyword(e.target.value)}
-                    />
-                    <Button
-                      type="primary"
-                      shape="circle"
-                      icon={<SearchOutlined />}
-                      onClick={searchData}
-                    />
-                  </div>
-                </Space>
-              </Col>
-              <Col style={{ marginTop: "1rem", width: "100%" }}>
-                <Table
-                  columns={columns}
-                  dataSource={filteredData.map((item, idx) => ({
-                    ...item,
-                    key: idx,
-                  }))}
-                  onRow={(record, rowIndex) => ({
-                    onClick: () => deleteRow(rowIndex),
-                  })}
-                  pagination={true}
-                />
-              </Col>
-            </Flex>
-          </Col>
-        </Row> */}
-        <Modal
-          title="삭제 확인"
-          open={chkDeleteModal}
-          onOk={confirmDelete}
-          onCancel={cancelDelete}
-          okText="삭제"
-          cancelText="취소"
-        >
-          <p>
-            이 항목을 삭제할까요?
-            <br />
-            {selectedRow?.title}, {selectedRow?.fir}, {selectedRow?.scnd}
-          </p>
-        </Modal>
       </section>
     </>
   );

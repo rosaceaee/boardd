@@ -31,53 +31,7 @@ const reducer = (state, action) => {
   }
 };
 
-const columns = [
-  { title: "범례", dataIndex: "title", key: "title" },
-  {
-    title: "하나",
-    dataIndex: "fir",
-    key: "fir",
-    sorter: (a, b) => a.fir - b.fir,
-  },
-  {
-    title: "둘",
-    dataIndex: "scnd",
-    key: "scnd",
-    sorter: (a, b) => a.scnd - b.scnd,
-  },
-];
-const columns1 = [
-  {
-    title: "제품명",
-    dataIndex: "prdName",
-    key: "prdName",
-  },
-  {
-    title: "현재 상태",
-    dataIndex: "status",
-    key: "status",
-  },
-  {
-    title: "수량",
-    dataIndex: "suryou",
-    key: "suryou",
-    sorter: (a, b) => a.suryou - b.suryou,
-    render: (suryou) => suryou.toLocaleString(),
-    align: "right",
-  },
-  {
-    title: "가격 (원)",
-    dataIndex: "price",
-    key: "price",
-    sorter: (a, b) => a.price - b.price,
-    render: (price) => `${price.toLocaleString()} 원`,
-    align: "right",
-  },
-];
-
-const Outstock = () => {
-  const [chkDeleteModal, setChkDeleteModal] = useState(false);
-  const [selectedRow, setSelectedRow] = useState(null);
+const Outstock = ({ data }) => {
   const [searchKeyword, setSearchKeyword] = useState("");
   const [cellData, dispatch] = useReducer(reducer, initialState);
   const [filteredData, setFilteredData] = useState([]);
@@ -116,92 +70,31 @@ const Outstock = () => {
     setInput((prev) => ({ ...prev, [name]: value }));
   };
 
-  const addRow = () => {
-    if (input.title && input.fir && input.scnd) {
-      dispatch({
-        type: "add",
-        payload: {
-          title: input.title,
-          fir: Number(input.fir),
-          scnd: Number(input.scnd),
-        },
-      });
-      setInput({ title: "", fir: "", scnd: "" });
-    } else {
-      alert("값을 모두 입력해주세요.");
-    }
-  };
-
-  const deleteRow = (index) => {
-    setSelectedRow({ ...cellData[index], index });
-    setChkDeleteModal(true);
-  };
-
-  const confirmDelete = () => {
-    dispatch({ type: "delete", index: selectedRow.index });
-    setChkDeleteModal(false);
-    setSelectedRow(null);
-  };
-
-  const cancelDelete = () => {
-    setChkDeleteModal(false);
-    setSelectedRow(null);
-  };
-
-  const searchData = () => {
-    const keyword = searchKeyword.toLowerCase().trim();
-
-    if (keyword === "") {
-      setFilteredData(cellData);
-      return;
-    }
-
-    const filtered = cellData.filter(
-      (item) =>
-        item.title.toLowerCase().includes(keyword) ||
-        item.fir.toString().includes(keyword) ||
-        item.scnd.toString().includes(keyword)
-    );
-
-    setFilteredData(filtered);
-  };
-
   const { Sider, Header, Content, Footer } = Layout;
+  const columns = [
+    { title: "신청일시", dataIndex: "date", key: "date" },
+    { title: "상품명", dataIndex: "name", key: "name" },
+    { title: "신청수량", dataIndex: "amount", key: "amount" },
+    { title: "상태", dataIndex: "status", key: "status" },
+  ];
 
   return (
     <>
       <section style={{ minHeight: "100vh" }}>
-        <h1>입/출고 리스트</h1>
+        <h1>재고 신청 현황</h1>
         <Row className="wrapp">
-          <Col size={24} style={{ border: "2px solid red", width: "100%" }}>
+          <Col size={24} style={{ width: "100%" }}>
             <Flex style={{ flexDirection: "column" }}>
               <Col style={{ marginTop: "1rem" }}>
-                {/* <Table
+                <Table
                   columns={columns}
-                  onRow={(record, rowIndex) => ({
-                    onClick: () => deleteRow(rowIndex),
-                  })}
-                  pagination={true}
-                /> */}
-                <Table columns={columns1} dataSource={nokoriData} />
+                  dataSource={data}
+                  locale={{ emptyText: "신청된 내역이 없습니다." }}
+                />
               </Col>
             </Flex>
           </Col>
         </Row>
-        <Modal
-          title="삭제 확인"
-          open={chkDeleteModal}
-          onOk={confirmDelete}
-          onCancel={cancelDelete}
-          okText="삭제"
-          cancelText="취소"
-        >
-          <p>
-            이 항목을 삭제할까요?
-            <br />
-            {selectedRow?.title}, {selectedRow?.fir}, {selectedRow?.scnd}
-          </p>
-        </Modal>
       </section>
     </>
   );

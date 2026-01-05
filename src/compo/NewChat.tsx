@@ -6,26 +6,27 @@ import {
   FileTextOutlined,
   FolderOpenOutlined,
 } from "@ant-design/icons";
-import { Avatar, Form, Input, Button } from "antd";
+import { Avatar, Form, Input, Button, Select } from "antd";
 import Box from "./Box";
 
 interface dataTypes {
   setOpen: boolean;
   onClose: () => void;
-
   title: string;
   children: React.ReactNode;
+  options: { label: string; value: string }[]; // 상위레벨에서 받아오ㅗㅁㅁ
 }
 
-const CustomDrawer = ({ title, children }: dataTypes) => {
+const NewChat = ({ title, options, onClose, children }: dataTypes) => {
   const [openDrawer, setOpenDrawer] = useState(false);
   const closeThis = () => {
     setOpenDrawer((a) => !a);
   };
+  const [selectedTarget, setSelectedTarget] = useState("");
 
   const [form] = Form.useForm();
   const [messages, setMessages] = useState([
-    { id: 1, text: "안녕하세요?", type: "received" },
+    { id: 1, text: "안녕하세요!?", type: "received" },
   ]);
 
   const handleSend = (values: Record<string, any>) => {
@@ -53,6 +54,13 @@ const CustomDrawer = ({ title, children }: dataTypes) => {
               <span style={{ fontWeight: "bold" }}>{title}</span>
               <br />
               {children}
+              <Select
+                placeholder="대상 선택"
+                style={{ width: "100%" }}
+                options={options}
+                onChange={(value) => setSelectedTarget(value)}
+                showSearch
+              />
             </div>
             <p className="back" onClick={closeThis}>
               BACK
@@ -69,17 +77,6 @@ const CustomDrawer = ({ title, children }: dataTypes) => {
               <Box
                 radius={10}
                 className="bg received"
-                widthh={0}
-                background={`#fff`}
-              >
-                <p>annyeong haseyong</p>
-              </Box>
-            </div>
-
-            <div className="usr-chat-box reverse">
-              <Box
-                radius={10}
-                className="bg sent"
                 widthh={0}
                 background={`#fff`}
               >
@@ -126,4 +123,4 @@ const CustomDrawer = ({ title, children }: dataTypes) => {
   );
 };
 
-export default CustomDrawer;
+export default NewChat;
