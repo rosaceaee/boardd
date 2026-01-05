@@ -306,7 +306,7 @@ const Settings = () => {
               width: "100%",
             }}
           >
-            <Box radius={15} className="box" padding={2}>
+            <Box radius={15} className="box profile">
               <Avatar size={64} icon={<UserOutlined />} />
               <h2>Hong gildong</h2>
               <p>Dev / Manager</p>
@@ -389,34 +389,18 @@ const Settings = () => {
               </Box> */}
             </Flex>
 
-            <Box
-              radius={15}
-              padding={2}
-              className="box"
-              style={{ marginTop: "1rem" }}
-            >
+            <Box radius={15} className="box cs-msg-summary">
               <Flex
                 style={{ justifyContent: "flex-start", alignItems: "center" }}
               >
-                <h2 style={{ textAlign: "left" }}>메일 문의</h2>
+                <h2 className="tit">메일 문의</h2>
                 <Button type="link">더보기</Button>
               </Flex>
-              <ul>
+              <ul className="main-mailbox">
                 {dummyMail.received.map((mail, index) => {
                   return (
                     <>
-                      <li
-                        key={index}
-                        style={{
-                          margin: "0.3rem 0",
-                          border: "1px solid gray",
-                          display: "grid",
-                          gridTemplateColumns: "auto 4% 20%",
-                          justifyContent: "left",
-                          padding: "0.7rem 1rem",
-                          gap: "0rem 3rem",
-                        }}
-                      >
+                      <li key={index} className="mail-sect">
                         <span>{mail.date}</span>
                         <span>{mail.author}</span>
                         <span className="mail-desc">{mail.desc}</span>
@@ -427,52 +411,28 @@ const Settings = () => {
               </ul>
             </Box>
 
-            <Box
-              radius={15}
-              padding={2}
-              className="box"
-              style={{ marginTop: "1rem" }}
-            >
+            <Box radius={15} className="box cs-msg-summary">
               <Flex
                 style={{ justifyContent: "flex-start", alignItems: "center" }}
               >
-                <h2 style={{ textAlign: "left" }}>게시판별 문의</h2>
+                <h2 className="tit">게시판 문의</h2>
                 <Button type="link">더보기</Button>
-              </Flex>{" "}
-              {dummyMail.received.map((mail, index) => {
-                return (
-                  <>
-                    <ul>
-                      <li
-                        key={index}
-                        style={{
-                          margin: "0.3rem 0",
-                          border: "1px solid gray",
-                          display: "grid",
-                          gridTemplateColumns: "auto 4% 20%",
-                          justifyContent: "left",
-                          padding: "0.7rem 1rem",
-                          gap: "0rem 3rem",
-                        }}
-                      >
+              </Flex>
+              <ul className="main-mailbox">
+                {dummyMail.received.map((mail, index) => {
+                  return (
+                    <>
+                      <li key={index} className="mail-sect">
                         <span>{mail.date}</span>
                         <span>{mail.author}</span>
                         <span className="mail-desc">{mail.desc}</span>
                       </li>
-                    </ul>
-                  </>
-                );
-              })}
+                    </>
+                  );
+                })}
+              </ul>
             </Box>
           </Flex>
-
-          {/* <Box
-            radius={15}
-            className="box"
-            style={{ maxWidth: "100%", flex: "1", height: "100%" }}
-          >
-            <Bar data={chartData} />
-          </Box> */}
         </div>
 
         {/* <section style={{ minHeight: "100vh" }}>
