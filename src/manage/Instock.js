@@ -34,7 +34,7 @@ const reducer = (state, action) => {
   }
 };
 
-const Instock = ({ onApplySuccess }) => {
+const Instock = ({ onApplySuccess, selectedCategory }) => {
   const [activeFilter, setActiveFilter] = useState(DATA_FILTERS.all);
   const [tableData, setTableData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -70,11 +70,7 @@ const Instock = ({ onApplySuccess }) => {
       try {
         const data = await dummyZaikoApi(activeFilter);
 
-        // 🚨 핵심 수정: 테이블에 설정하기 전에 모든 데이터의 유효성을 검사합니다.
         const cleanedData = data.filter((item) => {
-          // item 객체가 존재하고 (null/undefined 방지),
-          // id가 존재하며 (잘못된 병합 데이터 방지),
-          // price와 suryou가 undefined가 아님을 확인하여 toLocaleString 오류 방지
           const isValid =
             item &&
             item.id !== undefined &&
@@ -112,6 +108,21 @@ const Instock = ({ onApplySuccess }) => {
   };
 
   const hide = () => setOpenId(null);
+  const done = (statusVal) => {
+    setOpenId(null);
+    statusVal = "Arrivingsoon";
+    console.log(statusVal);
+    return statusVal;
+  };
+
+  const [modifiedStatus, setModifiedStatus] = useState({});
+  // 재고추가 팝오버 완료 -> 스테이터스 변경
+  const changeStatus = (id, nextStatus) => {
+    setModifiedStatus((prev) => ({
+      ...prev,
+      [id]: nextStatus,
+    }));
+  };
 
   const [step, setStep] = useState(1);
   const [num, setNum] = useState(0);
@@ -139,8 +150,9 @@ const Instock = ({ onApplySuccess }) => {
       dataIndex: "status",
       key: "status",
       render: (statusVal, record) => {
+        const currentStatus = modifiedStatus[record.id] || statusVal;
         let btn;
-        switch (statusVal) {
+        switch (currentStatus) {
           case "Instock":
             btn = (
               <Button type="primary" variant="solid">
@@ -164,26 +176,32 @@ const Instock = ({ onApplySuccess }) => {
                   setStep(1);
                 }}
                 content={
-                  <div style={{ minWidth: "200px" }}>
+                  <div className="step-wrap">
                     {step === 1 && (
-                      <div>
-                        <p>
-                          재고가 부족합니다. 몇 개 신청할래?{record.prdName}{" "}
-                        </p>
-                        <p>숫자를 입력하거나 증감 버튼으로 조작 가넝</p>
-                        <InputNumber
-                          min={1}
-                          style={{ width: "100%", marginBottom: "10px" }}
-                          // onChange={(value) => setNum(value)}
-                          onChange={(v) => setNum(v || 0)}
-                        />
-                        <div
-                          style={{
-                            display: "flex",
-                            gap: "10px",
-                            marginTop: "10px",
-                          }}
-                        >
+                      <div className="inner step1">
+                        <span className="desc">
+                          재고가 부족합니다. 몇 개 신청할래?
+                          <br />
+                          <span className="note">
+                            숫자를 입력하거나 증감 버튼으로 조작 가넝
+                          </span>
+                          {/* {record.prdName} */}
+                        </span>
+
+                        <div className="input-wrap">
+                          <InputNumber
+                            min={1}
+                            // onChange={(value) => setNum(value)}
+                            onChange={(v) => setNum(v || 0)}
+                          />
+                          <span
+                            style={{ fontSize: "1rem", marginLeft: "0.5rem" }}
+                          >
+                            개
+                          </span>
+                        </div>
+
+                        <div className="confirm-btn-wrap">
                           <Button
                             type="primary"
                             onClick={() => setStep(2)}
@@ -191,7 +209,7 @@ const Instock = ({ onApplySuccess }) => {
                           >
                             확인
                           </Button>
-                          <Button type="text" onClick={hide}>
+                          <Button type="dashed" onClick={hide}>
                             취소
                           </Button>
                         </div>
@@ -199,7 +217,7 @@ const Instock = ({ onApplySuccess }) => {
                     )}
 
                     {step === 2 && (
-                      <div>
+                      <div className="inner step2">
                         {/* <p>
                           <strong>{num}개</strong> 맞아?
                         </p>
@@ -210,40 +228,59 @@ const Instock = ({ onApplySuccess }) => {
                           <Button onClick={() => setStep(1)}>
                             아니, 수정할래
                           </Button> </div> */}
-                        <strong>{num}개</strong> 맞아?
-                        <Button
-                          onClick={() => {
-                            console.log("전송 데이터:", record, num);
-                            onApplySuccess({
-                              id: record.id,
-                              name: record.prdName,
-                              amount: num,
-                            });
-                            setStep(3);
-                          }}
-                        >
-                          전송
-                        </Button>{" "}
-                        <Button onClick={() => setStep(1)}>
-                          아니, 수정할래
-                        </Button>
+                        <span className="desc">
+                          <strong>{num}개</strong> 맞아?
+                        </span>
+
+                        <div className="confirm-btn-wrap">
+                          <Button
+                            type="primary"
+                            onClick={() => {
+                              // console.log("전송 데이터:", record, num);
+                              onApplySuccess({
+                                id: record.id,
+                                name: record.prdName,
+                                amount: num,
+                              });
+                              setStep(3);
+                            }}
+                          >
+                            전송
+                          </Button>
+                          <Button type="dashed" onClick={() => setStep(1)}>
+                            아니, 수정할래
+                          </Button>
+                        </div>
                       </div>
                     )}
 
                     {step === 3 && (
-                      <div style={{ textAlign: "center" }}>
-                        <p>
-                          {" "}
+                      <div
+                        className="inner step3"
+                        style={{ textAlign: "center" }}
+                      >
+                        <p className="desc">
                           {num}개 신청 완료. <br /> 상세내역은 다음 탭에서 확인
                         </p>
-                        <Button type="primary" onClick={hide}>
-                          닫기
-                        </Button>
+                        <div className="confirm-btn-wrap">
+                          <Button
+                            onClick={() => {
+                              changeStatus(record.id, "ArrivingSoon");
+                              onApplySuccess({
+                                ...record,
+                                status: "ArrivingSoon",
+                                amount: num,
+                              });
+                            }}
+                          >
+                            완료
+                          </Button>
+                        </div>
                       </div>
                     )}
                   </div>
                 }
-                title="상태 변경"
+                title=""
                 trigger="click"
                 // open={openId === record.key}
                 // onOpenChange={(newOpen) => handleOpenChange(newOpen, record)}
@@ -255,7 +292,7 @@ const Instock = ({ onApplySuccess }) => {
             );
             break;
           default:
-            btn = <span>{statusVal}</span>;
+            btn = <span>{currentStatus}</span>;
         }
         return btn;
       },
