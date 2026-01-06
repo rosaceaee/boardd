@@ -294,8 +294,59 @@ $ccc: #cccccc;
 }
 //////메인 끝.
 
+///
+.step-wrap {
+  min-width: 200px;
+  .inner {
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    &.step1 {
+      gap: 3px;
+
+      .desc {
+        margin-bottom: 0.6rem;
+      }
+      .note {
+        font-size: 0.7rem;
+        font-weight: 500;
+      }
+
+      .input-wrap {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        line-height: 1.21;
+      }
+    }
+    .desc {
+      font-size: 1rem;
+      font-weight: 600;
+      text-align: center;
+    }
+    .note {
+      font-size: 0.7rem;
+      font-weight: 500;
+    }
+  }
+}
+.confirm-btn-wrap {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin-top: 2rem;
+}
+
 // cs - 메일 답장 모달영역
 .mail-reply-wrap {
+  .usr-info {
+    display: flex;
+    gap: 0.5rem;
+    flex-direction: column;
+    padding-bottom: 1rem;
+  }
   .mail-body {
     margin: 1rem 0 2rem;
     white-space: pre-wrap;
