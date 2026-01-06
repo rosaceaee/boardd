@@ -91,17 +91,23 @@ const Mail = () => {
       >
         {detail && (
           <div className="mail-reply-wrap" style={{ paddingTop: "10px" }}>
-            <p>
-              <strong>날짜:</strong> {detail.date}
-            </p>
-            <p>
-              <strong>작성자:</strong> {detail.author}
-            </p>
-            <p>
-              <strong>제목:</strong> {detail.title}
-            </p>
+            <h2 style={{ margin: "0.5rem 0 1rem" }}>답장하기</h2>
+            <div className="usr-info">
+              <p>
+                <strong>날짜:</strong> {detail.date}
+              </p>
+              <p>
+                <strong>발신자:</strong> {detail.author}
+              </p>
+              <p>
+                <strong>제목:</strong> {detail.title}
+              </p>
+            </div>
+
             <hr />
-            <div className="mail-body">{detail.desc}</div>
+            <div className="mail-body">
+              <p>{detail.desc}</p>
+            </div>
           </div>
         )}
 
