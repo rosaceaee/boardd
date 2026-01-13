@@ -50,9 +50,9 @@ const NewChat = ({ title, options, onClose, children }: dataTypes) => {
         <div className="chat-detail">
           <div className="usr-info">
             <div className="info-box">
-              <Avatar size={46} icon={<UserOutlined />} />
+              {/* <Avatar size={46} icon={<UserOutlined />} /> 
               <span style={{ fontWeight: "bold" }}>{title}</span>
-              <br />
+              <br />*/}
               {children}
               <Select
                 placeholder="대상 선택"

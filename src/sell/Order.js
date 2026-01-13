@@ -90,17 +90,7 @@ const Order = () => {
   const [tableData, setTableData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [selectedRow, setSelectedRow] = useState(null);
-  const [searchKeyword, setSearchKeyword] = useState("");
-  const [filteredData, setFilteredData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-
-  const { Sider, Header, Content, Footer } = Layout;
-
-  const [input, setInput] = useState({
-    title: "",
-    fir: "",
-    scnd: "",
-  });
 
   const handleFilterClick = (filterId) => {
     setActiveFilter(filterId);
@@ -144,7 +134,11 @@ const Order = () => {
 
   return (
     <>
-      <section style={{ minHeight: "100vh" }}>
+      <section
+        style={{ minHeight: "100vh", paddingTop: "calc(46 * 1rem / 16)" }}
+      >
+        <h2>주문배송관리</h2>
+
         <Row className="wrapp" style={{ flexDirection: "row" }}>
           <Col
             size={12}
@@ -152,6 +146,62 @@ const Order = () => {
             // className={getBoxClassName("instock")}
             // onClick={() => onHeree("instock")}
           >
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                marginBottom: "1rem",
+              }}
+            >
+              <div style={{ display: "flex", gap: "1rem" }}>
+                <div style={{ display: "flex", gap: "1rem" }}>
+                  <Button
+                    type={
+                      activeFilter === DATA_FILTERS.all ? "primary" : "default"
+                    }
+                    onClick={() => handleFilterClick(DATA_FILTERS.all)}
+                  >
+                    All
+                  </Button>
+
+                  <Button
+                    type={
+                      activeFilter === DATA_FILTERS.perfume
+                        ? "primary"
+                        : "default"
+                    }
+                    onClick={() => handleFilterClick(DATA_FILTERS.perfume)}
+                  >
+                    Perfume
+                  </Button>
+
+                  <Button
+                    type={
+                      activeFilter === DATA_FILTERS.body ? "primary" : "default"
+                    }
+                    onClick={() => handleFilterClick(DATA_FILTERS.body)}
+                  >
+                    Body
+                  </Button>
+
+                  <Button
+                    type={
+                      activeFilter === DATA_FILTERS.candle
+                        ? "primary"
+                        : "default"
+                    }
+                    onClick={() => handleFilterClick(DATA_FILTERS.candle)}
+                  >
+                    Candle
+                  </Button>
+                </div>
+              </div>
+
+              <div>
+                <input type="text" placeholder="search sth" />{" "}
+                <Button type="primary">go</Button>
+              </div>
+            </div>
             <Flex style={{ flexDirection: "column" }}>
               <Col style={{ marginTop: "1rem" }}>
                 <Table

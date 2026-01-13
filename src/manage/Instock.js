@@ -285,7 +285,7 @@ const Instock = ({ onApplySuccess, selectedCategory }) => {
                 // open={openId === record.key}
                 // onOpenChange={(newOpen) => handleOpenChange(newOpen, record)}
               >
-                <Button color="pink" variant="solid">
+                <Button color="pink" variant="solid" className="btn-no-stock">
                   재고없음
                 </Button>
               </Popover>

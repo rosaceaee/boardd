@@ -191,6 +191,8 @@ $ccc: #cccccc;
   align-items: center;
   justify-content: center;
   padding: 1rem;
+  border-top-left-radius: 1rem;
+  border-bottom-left-radius: 1rem;
   cursor: pointer;
 }
 
@@ -339,16 +341,65 @@ $ccc: #cccccc;
   margin-top: 2rem;
 }
 
-// cs - 메일 답장 모달영역
-.mail-reply-wrap {
-  .usr-info {
+.btn-no-stock {
+  position: relative;
+  &:after {
+    content: "\002B";
+    position: absolute;
+    top: -11px;
+    right: -14px;
+    width: 18px;
+    height: 20px;
+    background: blue;
+    font-size: 1rem;
+  }
+}
+
+// cs setting
+.cs-temp-wrap {
+  .nav-wrap {
+    margin: 2rem auto 1rem;
+    padding: 1rem 0 1rem;
     display: flex;
-    gap: 0.5rem;
-    flex-direction: column;
-    padding-bottom: 1rem;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    a {
+      font-size: 1.1rem;
+      border: 1px solid;
+      padding: 0.5rem 1rem;
+    }
   }
-  .mail-body {
-    margin: 1rem 0 2rem;
-    white-space: pre-wrap;
+}
+// cs - 메일 답장 모달영역
+.reply-container {
+  .ant-modal-content {
+    padding: 2rem !important;
+    position: fixed;
+    bottom: 1rem;
+    max-width: 100rem;
+    padding: 2rem !important;
+    position: fixed;
+    bottom: 1rem;
+    max-width: 100rem;
+    width: calc(80% - 3rem);
+    left: 50%;
+    transform: translateX(-50%);
+    .mail-reply-wrap {
+      .usr-info {
+        display: flex;
+        gap: 0.5rem;
+        flex-direction: column;
+        padding-bottom: 1rem;
+      }
+      .mail-body {
+        margin: 1rem 0 2rem;
+        white-space: pre-wrap;
+      }
+    }
   }
+}
+
+.reply-wrap {
+  padding: 1rem;
 }
