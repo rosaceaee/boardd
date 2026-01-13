@@ -76,18 +76,18 @@ const Mail = () => {
         transitionName=""
         maskTransitionName=""
         width="auto"
-        style={{ maxWidth: "1000px", width: "90%", padding: 0 }}
-        styles={{
-          content: {
-            position: "fixed",
-            bottom: "1rem",
-            left: "50%",
-            transform: "translateX(-50%)",
-            maxWidth: "1000px",
-            width: "calc(100% - 2rem)",
-            margin: 0,
-          },
-        }}
+        className="reply-container"
+        // styles={{
+        //   content: {
+        //     position: "fixed",
+        //     bottom: "1rem",
+        //     left: "50%",
+        //     transform: "translateX(-50%)",
+        //     maxWidth: "1000px",
+        //     width: "calc(100% - 2rem)",
+        //     margin: 0,
+        //   },
+        // }}
       >
         {detail && (
           <div className="mail-reply-wrap" style={{ paddingTop: "10px" }}>
@@ -116,13 +116,7 @@ const Mail = () => {
             답장하기
           </Button>
         ) : (
-          <div
-            style={{
-              marginTop: "20px",
-              borderTop: "1px solid #eee",
-              paddingTop: "20px",
-            }}
-          >
+          <div className="reply-wrap">
             <Input.TextArea
               rows={4}
               placeholder="답장 내용을 입력ㄱ"
@@ -147,3 +141,170 @@ const Mail = () => {
 };
 
 export default Mail;
+
+{
+  /*
+
+const dataMap = {
+    perfume: [
+      {
+        floral: [
+          {
+            id: "p1",
+            prdName: "Midnight Floral",
+            status: "Instock",
+            suryou: 45,
+            price: 150000,
+            haisouStat: "haisou",
+            history: [
+              { date: "2025-12-25", suryou: 50 },
+              { date: "2025-12-26", suryou: 48 },
+              { date: "2025-12-27", suryou: 45 },
+            ],
+          },
+          {
+            id: "p2",
+            prdName: "Spring Bloom",
+            status: "Instock",
+            suryou: 12,
+            price: 120000,
+            haisouStat: "haisouing",
+  
+            history: [
+              { date: "2025-12-25", suryou: 20 },
+              { date: "2025-12-26", suryou: 15 },
+              { date: "2025-12-27", suryou: 12 },
+            ],
+          },
+        ],
+        woody: [
+          {
+            id: "p3",
+            prdName: "Deep Forest",
+            status: "ArrivingSoon",
+            haisouStat: "haisou",
+            suryou: 5,
+            price: 180000,
+            history: [
+              { date: "2025-12-25", suryou: 8 },
+              { date: "2025-12-26", suryou: 7 },
+              { date: "2025-12-27", suryou: 5 },
+            ],
+          },
+        ],
+      },
+    ],
+    body: [
+      {
+        hair: [
+          {
+            id: "b1",
+            prdName: "Silk Shampoo",
+            status: "lowQ",
+            suryou: 80,
+            price: 45000,
+            haisouStat: "haisoued",
+  
+            history: [
+              { date: "2025-12-25", suryou: 85 },
+              { date: "2025-12-26", suryou: 82 },
+              { date: "2025-12-27", suryou: 80 },
+            ],
+          },
+        ],
+        hand: [
+          {
+            id: "b2",
+            prdName: "Velvet Cream Treatment",
+            status: "Instock",
+            suryou: 3,
+            price: 28000,
+            haisouStat: "haisouReady",
+  
+            history: [
+              { date: "2025-12-25", suryou: 10 },
+              { date: "2025-12-26", suryou: 5 },
+              { date: "2025-12-27", suryou: 3 },
+            ],
+          },
+        ],
+      },
+    ],
+    candle: [
+      // 캔들은 depth가 하나 적은 구조일 경우
+      {
+        id: "c1",
+        prdName: "Warm Cotton",
+        status: "Instock",
+        suryou: 25,
+        price: 35000,
+        haisouStat: "haisouReady",
+  
+        history: [
+          { date: "2025-12-25", suryou: 30 },
+          { date: "2025-12-26", suryou: 28 },
+          { date: "2025-12-27", suryou: 25 },
+        ],
+      },
+    ],
+  };
+  
+  export const DATA_FILTERS = {
+    all: "all",
+    perfume: "perfume",
+    body: "body",
+    candle: "candle",
+  };
+  
+  // 2. 핵심 로직: 복잡한 중첩 구조를 평탄화(Flatten)하는 함수
+  const flattenCategory = (categoryData) => {
+    if (!categoryData) return [];
+  
+    // 만약 바로 배열 안에 상품이 들어있는 형태라면 (예: candle)
+    if (Array.isArray(categoryData) && categoryData[0]?.prdName)
+      return categoryData;
+  
+    // 객체(소분류)들이 담긴 배열인 경우 (예: perfume, body)
+    return categoryData.flatMap((subGroup) => {
+      // subGroup 예: { floral: [...], woody: [...] }
+      return Object.values(subGroup).flat();
+    });
+  };
+  
+  // 3. API 호출 함수
+  export const dummyZaikoApi = (categoryKey) => {
+    let processedData = [];
+  
+    if (categoryKey === DATA_FILTERS.all) {
+      // 모든 키를 순회하며 평탄화하여 합침
+      processedData = Object.keys(dataMap).flatMap((key) =>
+        flattenCategory(dataMap[key])
+      );
+    } else {
+      // 특정 카테고리만 평탄화
+      processedData = flattenCategory(dataMap[categoryKey]);
+    }
+  
+    return new Promise((resolve) => {
+      setTimeout(() => resolve(processedData), 100);
+    });
+  };
+  
+
+
+  const handleSend = (values: Record<string, any>) => {
+    const text = values.user?.introduction;
+    if (!text || !text.trim()) return;
+
+    const newMessage = {
+      id: Date.now(), 
+      text: text,
+      type: "sent", 
+    };
+
+    // 3. 기존 배열 뒤에 새 메시지 추가 (Append 효과)
+    setMessages((prev) => [...prev, newMessage]);
+
+    form.resetFields();
+  };*/
+}

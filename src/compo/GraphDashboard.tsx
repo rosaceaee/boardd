@@ -83,12 +83,14 @@ const GraphDashboard: React.FC<any> = ({ activeKey, activeDetailData }) => {
         <div>
           <div style={{ marginBottom: "20px" }}>
             <h2 style={{ fontSize: "18px", margin: 0, color: "#1a1a1a" }}>
-              Inventory Trend
+              재고 변동 이력
               {/* <span style={{ color: "#36A2EB" }}>
                 {activeKey.toUpperCase()}
               </span> */}
             </h2>
-            <p style={{ fontSize: "13px", color: "#8c8c8c" }}>
+            <p
+              style={{ marginTop: "1rem", fontSize: "13px", color: "#8c8c8c" }}
+            >
               최근 5일간의 주요 품목 재고 변동 이력입니다.
             </p>
           </div>

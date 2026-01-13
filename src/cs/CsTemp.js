@@ -21,21 +21,20 @@ const CsTemp = () => {
   const location = useLocation();
 
   const title = location.pathname.includes("mail")
-    ? "보낸 편지함"
-    : "게시판 요청";
+    ? "메일 관리"
+    : "게시판 관리";
 
   return (
-    <div style={{ padding: "20px", fontFamily: "sans-serif" }}>
-      <nav>
+    <div className="cs-temp-wrap">
+      <nav className="nav-wrap">
         <Link replace to="/sellManage/mail">
-          메일 보기
+          메일 관리
         </Link>
-        |
+
         <Link replace to="/sellManage/boardCs">
-          게시판 요청 보기
+          게시판 관리
         </Link>
       </nav>
-      <hr />
       <header>
         <h1 style={{ margin: "2rem 0" }}>{title}</h1>
       </header>

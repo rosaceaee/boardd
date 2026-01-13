@@ -13,6 +13,7 @@ import {
   SearchOutlined,
   InfoCircleTwoTone,
   QuestionCircleOutlined,
+  CloseCircleOutlined,
 } from "@ant-design/icons";
 import {
   Layout,
@@ -208,13 +209,13 @@ function App() {
       {open && (
         <Box
           className="chat-listbox"
-          style={{ border: "1px solid red" }}
+
           // onClick={() => setOpen(false)}
         >
           <div className="closeBtn" onClick={closeParentModal}>
-            close
+            <CloseCircleOutlined style={{ fontSize: "2rem" }} />
           </div>
-          <h1 style={{ margin: "1rem auto 2rem" }}>Chat list</h1>
+          <h1 style={{ margin: "1rem auto 2rem" }}>채팅 목록</h1>
           <Flex style={{ flexDirection: "column", gap: "1rem" }}>
             {dummyMail.received.map((name, idx) => {
               return (
@@ -258,7 +259,6 @@ function App() {
             </Button>
             {listOpen === "some" && (
               <NewChat
-                title="새 채팅 시작"
                 options={contactOptions}
                 onClose={handleClose}
                 transferStates={transferStates}

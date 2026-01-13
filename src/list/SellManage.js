@@ -193,10 +193,9 @@ const SellManage = () => {
 
   const items2 = [
     { key: "/ReportSell", label: "매출 현황 분석" },
-    { key: "/ManageShipping", label: "주문/배송 관리" },
-    // { key: "/ManageShipping", label: "상품 성과 분석" },
+    // { key: "/ManageShipping", label: "주문/배송 관리" },
     { key: "/sellManage/mail", label: "메일" },
-    { key: "/sellManage/boardCs", label: "게시판문의" },
+    // { key: "/sellManage/boardCs", label: "게시판문의" },
   ];
 
   const tabItems = items2.map((item) => {
