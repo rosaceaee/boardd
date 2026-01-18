@@ -182,14 +182,15 @@ function App() {
             <Route path="settings/*" element={<Settings />} />
             <Route path="usrpage/*" element={<UserPage />} />
             <Route path="sellmanage" element={<SellManage />} />
-            <Route path="mail" element={<CsTemp />} />
             {/* <Route path="mail" element={<Mail />} /> */}
             <Route path="boardcs" element={<BoardCs />} />
 
             <Route path="/sellManage" element={<SellManage />}>
-              <Route index element={<SellManage />} />
-              <Route path="mail" element={<Mail />} />
-              <Route path="boardCs" element={<BoardCs />} />
+              <Route element={<CsTemp />}>
+                <Route index element={<Mail />} />
+                <Route path="mail" element={<Mail />} />
+                <Route path="boardCs" element={<BoardCs />} />
+              </Route>
             </Route>
             <Route path="*" element={<div>404 Page Not Found</div>}></Route>
           </Route>

@@ -25,7 +25,7 @@ const ManageShipping = () => {
   };
 
   const items2 = [
-    { key: "/ReportSell", label: "매출 현황 분석" },
+    // { key: "/ReportSell", label: "매출 현황 분석" },
     { key: "/ManageShipping", label: "주문/배송 관리" },
     // { key: "/ManageShipping", label: "상품 성과 분석" },
     { key: "/sub12", label: "광고/마케팅 성과" },

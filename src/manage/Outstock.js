@@ -70,9 +70,8 @@ const Outstock = ({ data }) => {
     setInput((prev) => ({ ...prev, [name]: value }));
   };
 
-  const { Sider, Header, Content, Footer } = Layout;
   const columns = [
-    { title: "신청일시", dataIndex: "date", key: "date" },
+    { title: "신청일시", dataIndex: "date", key: "date", width: "20%" },
     { title: "상품명", dataIndex: "name", key: "name" },
     { title: "신청수량", dataIndex: "amount", key: "amount" },
     { title: "상태", dataIndex: "status", key: "status" },

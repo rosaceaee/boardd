@@ -15,7 +15,6 @@ import {
   Tabs,
 } from "antd";
 import { FormProvider } from "rc-field-form";
-import { dummyStockApi } from "../manage/dummyStockApi";
 import { dummyZaikoApi, DATA_FILTERS } from "../manage/dummyZaikoApi";
 
 const initialState = [];
@@ -225,28 +224,7 @@ const Order = () => {
               </Col>
             </Flex>
           </Col>
-          {/* <Col
-            size={12}
-            style={{ width: "50%" }}
-            className={getBoxClassName("outstock")}
-            onClick={() => onHeree("outstock")}
-          >
-          </Col> */}
         </Row>
-        <Modal
-          title="삭제 확인"
-          // open={chkDeleteModal}
-          // onOk={confirmDelete}
-          // onCancel={cancelDelete}
-          okText="삭제"
-          cancelText="취소"
-        >
-          <p>
-            이 항목을 삭제할까요?
-            <br />
-            {selectedRow?.title}, {selectedRow?.fir}, {selectedRow?.scnd}
-          </p>
-        </Modal>
       </section>
     </>
   );
