@@ -144,10 +144,10 @@ const Instock = ({ onApplySuccess, selectedCategory }) => {
                     {step === 1 && (
                       <div className="inner step1">
                         <span className="desc">
-                          재고가 부족합니다. 몇 개 신청할래?
+                          재고가 부족합니다. 몇 개 신청할까요?
                           <br />
                           <span className="note">
-                            숫자를 입력하거나 증감 버튼으로 조작 가넝
+                            숫자를 입력하거나 증감 버튼으로 조절
                           </span>
                           {/* {record.prdName} */}
                         </span>
