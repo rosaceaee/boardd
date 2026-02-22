@@ -17,7 +17,6 @@ import {
   Popover,
 } from "antd";
 import { FormProvider } from "rc-field-form";
-import { dummyStockApi } from "../manage/dummyStockApi";
 import { dummyZaikoApi, DATA_FILTERS } from "../manage/dummyZaikoApi";
 import { inventoryApi } from "../api/inventoryApi";
 
@@ -37,25 +36,16 @@ const reducer = (state, action) => {
 const Instock = ({ onApplySuccess, selectedCategory }) => {
   const [activeFilter, setActiveFilter] = useState(DATA_FILTERS.all);
   const [tableData, setTableData] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [selectedRow, setSelectedRow] = useState(null);
-  const [searchKeyword, setSearchKeyword] = useState("");
+
   const [cellData, dispatch] = useReducer(reducer, initialState);
   const [filteredData, setFilteredData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [openId, setOpenId] = useState(null);
 
-  const { Sider, Header, Content, Footer } = Layout;
-
+  const [isLoading, setIsLoading] = useState(false);
   useEffect(() => {
     setFilteredData(cellData);
   }, [cellData]);
-
-  useEffect(() => {
-    if (searchKeyword.trim() === "") {
-      setFilteredData(cellData);
-    }
-  }, [searchKeyword, cellData]);
 
   const handleFilterClick = (filterId) => {
     setActiveFilter(filterId);
@@ -97,23 +87,7 @@ const Instock = ({ onApplySuccess, selectedCategory }) => {
     setCurrentPage(pagination.current);
   };
 
-  const handleOpenChange = (newOpen, record) => {
-    if (newOpen) {
-      setOpenId(record.key);
-      setStep(1);
-      setNum(0);
-    } else {
-      setOpenId(null);
-    }
-  };
-
   const hide = () => setOpenId(null);
-  const done = (statusVal) => {
-    setOpenId(null);
-    statusVal = "Arrivingsoon";
-    console.log(statusVal);
-    return statusVal;
-  };
 
   const [modifiedStatus, setModifiedStatus] = useState({});
   // 재고추가 팝오버 완료 -> 스테이터스 변경
@@ -126,29 +100,19 @@ const Instock = ({ onApplySuccess, selectedCategory }) => {
 
   const [step, setStep] = useState(1);
   const [num, setNum] = useState(0);
-  const handleRequestApi = async (record) => {
-    const mappedData = {
-      key: record.id,
-      name: record.prdName,
-      count: num,
-      date: new Date().toLocaleString(),
-      status: "신청완료",
-    };
-
-    onApplySuccess(mappedData);
-    setStep(3);
-  };
 
   const columns = [
     {
       title: "제품명",
       dataIndex: "prdName",
       key: "prdName",
+      width: "20%",
     },
     {
       title: "현재 상태",
       dataIndex: "status",
       key: "status",
+      width: "10%",
       render: (statusVal, record) => {
         const currentStatus = modifiedStatus[record.id] || statusVal;
         let btn;
@@ -180,10 +144,10 @@ const Instock = ({ onApplySuccess, selectedCategory }) => {
                     {step === 1 && (
                       <div className="inner step1">
                         <span className="desc">
-                          재고가 부족합니다. 몇 개 신청할래?
+                          재고가 부족합니다. 몇 개 신청할까요?
                           <br />
                           <span className="note">
-                            숫자를 입력하거나 증감 버튼으로 조작 가넝
+                            숫자를 입력하거나 증감 버튼으로 조절
                           </span>
                           {/* {record.prdName} */}
                         </span>
@@ -236,12 +200,13 @@ const Instock = ({ onApplySuccess, selectedCategory }) => {
                           <Button
                             type="primary"
                             onClick={() => {
-                              // console.log("전송 데이터:", record, num);
-                              onApplySuccess({
-                                id: record.id,
-                                name: record.prdName,
-                                amount: num,
-                              });
+                              console.log("전송 데이터:", record, num);
+                              // onApplySuccess({
+                              //   // id: record.id,
+                              //   name: record.prdName,
+                              //   amount: num,
+                              //   status: record.status,
+                              // });
                               setStep(3);
                             }}
                           >
@@ -267,9 +232,11 @@ const Instock = ({ onApplySuccess, selectedCategory }) => {
                             onClick={() => {
                               changeStatus(record.id, "ArrivingSoon");
                               onApplySuccess({
-                                ...record,
-                                status: "ArrivingSoon",
+                                // ...record,
+                                name: record.prdName,
                                 amount: num,
+                                status: record.status,
+                                date: new Date().toLocaleString(),
                               });
                             }}
                           >
@@ -320,7 +287,10 @@ const Instock = ({ onApplySuccess, selectedCategory }) => {
       <section style={{ minHeight: "100vh" }}>
         <h2>입/출고 일람</h2>
 
-        <Row className="wrapp" style={{ flexDirection: "row" }}>
+        <Row
+          className="wrapp"
+          style={{ flexDirection: "row", padding: "0 3rem" }}
+        >
           <Col size={12} style={{ width: "100%" }}>
             <Flex style={{ flexDirection: "column" }}>
               <Col style={{ marginTop: "1rem" }}>
@@ -415,20 +385,6 @@ const Instock = ({ onApplySuccess, selectedCategory }) => {
           >
           </Col> */}
         </Row>
-        <Modal
-          title="삭제 확인"
-          // open={chkDeleteModal}
-          // onOk={confirmDelete}
-          // onCancel={cancelDelete}
-          okText="삭제"
-          cancelText="취소"
-        >
-          <p>
-            이 항목을 삭제할까요?
-            <br />
-            {selectedRow?.title}, {selectedRow?.fir}, {selectedRow?.scnd}
-          </p>
-        </Modal>
       </section>
     </>
   );

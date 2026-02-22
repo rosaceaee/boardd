@@ -237,18 +237,7 @@ const ExAntd = () => {
         <Menu items={items} mode="inline" theme="dark" onClick={(a) => a} />
       </Sider>       */}
       {/* <SidebarMenu /> */}
-      <Tabs
-        tabPosition={tabPosition}
-        // items={Array.from({ length: 3 }).map((_, i) => {
-        //   const id = String(i + 1);
-        //   return {
-        //     label: `Tab ${id}`,
-        //     key: id,
-        //     children: `Content of Tab ${id}`,
-        //   };
-        // })}
-        items={tabItems}
-      />
+      <Tabs tabPosition={tabPosition} items={tabItems} />
       <Content>
         <Dropdown menu={{ items }} trigger={["click"]}>
           <a onClick={(e) => e.preventDefault()}>

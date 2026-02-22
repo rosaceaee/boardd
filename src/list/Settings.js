@@ -5,7 +5,6 @@ import RequestStock from "../compo/RequestStock";
 import GraphDashboard from "../compo/GraphDashboard";
 
 // import { DATA_FILTERS } from "../manage/stockData";
-import { dummyStockApi } from "../manage/dummyStockApi";
 import { dummyZaikoApi, DATA_FILTERS } from "../manage/dummyZaikoApi";
 
 import { SearchOutlined, InfoCircleTwoTone } from "@ant-design/icons";

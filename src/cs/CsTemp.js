@@ -20,13 +20,13 @@ import {
 const CsTemp = () => {
   const location = useLocation();
 
-  const title = location.pathname.includes("mail")
-    ? "메일 관리"
-    : "게시판 관리";
+  const title = location.pathname.includes("boardCs")
+    ? "게시판 관리"
+    : "메일 관리";
 
   return (
     <div className="cs-temp-wrap">
-      <nav className="nav-wrap">
+      {/* <nav className="nav-wrap">
         <Link replace to="/sellManage/mail">
           메일 관리
         </Link>
@@ -34,7 +34,7 @@ const CsTemp = () => {
         <Link replace to="/sellManage/boardCs">
           게시판 관리
         </Link>
-      </nav>
+      </nav> */}
       <header>
         <h1 style={{ margin: "2rem 0" }}>{title}</h1>
       </header>
