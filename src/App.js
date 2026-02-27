@@ -153,7 +153,6 @@ function App() {
 
   const transferStates = { open, setOpen, listOpen, setListOpen, openList };
   const newChat = (name) => {
-    // alert("y");
     setListOpen("some");
   };
 

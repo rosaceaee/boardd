@@ -19,6 +19,7 @@ import {
 import { FormProvider } from "rc-field-form";
 import { dummyZaikoApi, DATA_FILTERS } from "../manage/dummyZaikoApi";
 import { inventoryApi } from "../api/inventoryApi";
+import AddZaiko from "./AddZaiko";
 
 const initialState = [];
 
@@ -42,7 +43,12 @@ const Instock = ({ onApplySuccess, selectedCategory }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [openId, setOpenId] = useState(null);
 
+  const [open, setOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+
+  const openModal = () => setOpen(true);
+  const close = () => setOpen(false);
+
   useEffect(() => {
     setFilteredData(cellData);
   }, [cellData]);
@@ -354,7 +360,6 @@ const Instock = ({ onApplySuccess, selectedCategory }) => {
                     <Button type="primary">go</Button>
                   </div>
                 </div>
-
                 <Table
                   columns={columns}
                   dataSource={tableData}
@@ -373,7 +378,15 @@ const Instock = ({ onApplySuccess, selectedCategory }) => {
                   }}
                 />
 
-                <Button type="primary">pdf download</Button>
+                <Button onClick={openModal} type="primary">
+                  add stock btn
+                </Button>
+                <AddZaiko
+                  open={open}
+                  close={close}
+                  onApplySuccess={onApplySuccess}
+                  selectedCategory={selectedCategory}
+                />
               </Col>
             </Flex>
           </Col>
