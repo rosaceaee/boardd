@@ -161,43 +161,6 @@ const Settings = () => {
     }
   }, [searchKeyword, cellData]);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setInput((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const addRow = () => {
-    if (input.title && input.fir && input.scnd) {
-      dispatch({
-        type: "add",
-        payload: {
-          title: input.title,
-          fir: Number(input.fir),
-          scnd: Number(input.scnd),
-        },
-      });
-      setInput({ title: "", fir: "", scnd: "" });
-    } else {
-      alert("값을 모두 입력해주세요.");
-    }
-  };
-
-  const deleteRow = (index) => {
-    setSelectedRow({ ...cellData[index], index });
-    setChkDeleteModal(true);
-  };
-
-  const confirmDelete = () => {
-    dispatch({ type: "delete", index: selectedRow.index });
-    setChkDeleteModal(false);
-    setSelectedRow(null);
-  };
-
-  const cancelDelete = () => {
-    setChkDeleteModal(false);
-    setSelectedRow(null);
-  };
-
   const searchData = () => {
     const keyword = searchKeyword.toLowerCase().trim();
 
@@ -267,7 +230,7 @@ const Settings = () => {
   };
 
   return (
-    <Layout>
+    <Layout style={{ background: "#001529" }}>
       <header
         style={{
           display: "flex",
@@ -278,7 +241,7 @@ const Settings = () => {
           gap: "2rem",
         }}
       >
-        <h1>Manage</h1>
+        <h1 style={{ color: "#fff" }}>Manage</h1>
         <Flex style={{ gap: "3rem" }}>
           <a href="sellManage/mail">Mall</a>
           <a href="" target="_blank">
@@ -296,36 +259,6 @@ const Settings = () => {
             gap: "1rem",
           }}
         >
-          <div
-            style={{
-              display: "flex",
-              gap: "10px",
-              flexDirection: "column",
-              maxWidth: "25rem",
-              width: "100%",
-            }}
-          >
-            <Box radius={15} className="box profile">
-              <Avatar size={64} icon={<UserOutlined />} />
-              <h2>Hong gildong</h2>
-              <p>Dev / Manager</p>
-              <Flex
-                style={{ justifyContent: "center", margin: "1.4rem 0 2rem" }}
-              >
-                <Button type="default" style={{ marginRight: "10px" }}>
-                  Todos
-                </Button>
-                <Button type="primary" style={{ marginRight: "10px" }}>
-                  Logout
-                </Button>
-              </Flex>
-            </Box>{" "}
-            <Box radius={15} className="box" style={{ height: "100%" }}>
-              <h3>달력</h3>
-              <Calendar />
-            </Box>
-          </div>
-
           <Flex style={{ flexDirection: "column", flex: "0 0 70%" }}>
             <Flex style={{ flexDirection: "row", gap: "1rem" }}>
               <Box
@@ -432,6 +365,36 @@ const Settings = () => {
               </ul>
             </Box>
           </Flex>
+
+          <div
+            style={{
+              display: "flex",
+              gap: "10px",
+              flexDirection: "column",
+              maxWidth: "25rem",
+              width: "100%",
+            }}
+          >
+            <Box radius={15} className="box profile">
+              <Avatar size={64} icon={<UserOutlined />} />
+              <h2>Hong gildong</h2>
+              <p>Dev / Manager</p>
+              <Flex
+                style={{ justifyContent: "center", margin: "1.4rem 0 2rem" }}
+              >
+                <Button type="default" style={{ marginRight: "10px" }}>
+                  Todos
+                </Button>
+                <Button type="primary" style={{ marginRight: "10px" }}>
+                  Logout
+                </Button>
+              </Flex>
+            </Box>{" "}
+            <Box radius={15} className="box" style={{ height: "100%" }}>
+              <h3>달력</h3>
+              <Calendar />
+            </Box>
+          </div>
         </div>
 
         {/* <section style={{ minHeight: "100vh" }}>

@@ -15,6 +15,12 @@ $ccc: #cccccc;
   justify-content: space-around;
 }
 
+.ant-layout-content {
+  margin: 0 !important;
+  background: #001529;
+  padding: 1rem 4rem;
+}
+
 // component - box
 .box {
   padding: 2rem;
@@ -88,6 +94,7 @@ $ccc: #cccccc;
   padding: 1rem;
   width: 400px;
   height: 100vh;
+  z-index: 999;
   position: fixed;
   right: 0;
   top: 0;
