@@ -1,17 +1,10 @@
 import React, { useState, useEffect, useReducer, useMemo } from "react";
 import Box from "../compo/Box.tsx";
-import HeaderTop from "../compo/HeaderTop";
-import {
-  BrowserRouter,
-  Routes,
-  Route,
-  useNavigate,
-  Outlet,
-  useLocation,
-} from "react-router-dom";
+import GraphDashboard from "../compo/GraphDashboard";
 
 // import { DATA_FILTERS } from "../manage/stockData";
 import { dummyZaikoApi, DATA_FILTERS } from "../manage/dummyZaikoApi";
+import { dummyMail } from "./dummyMail.js";
 
 import {
   Layout,
@@ -98,7 +91,7 @@ const columns = [
   },
 ];
 
-const Settings = () => {
+const First = () => {
   const [searchKeyword, setSearchKeyword] = useState("");
 
   const [cellData, dispatch] = useReducer(reducer, initialState);
@@ -156,14 +149,6 @@ const Settings = () => {
     }
   }, [searchKeyword, cellData]);
 
-  const { Sider, Header, Content, Footer } = Layout;
-
-  // 차트 데이터 생성 labelKey-> "title"
-  const chartData = useMemo(
-    () => generateChartData(columns, filteredData, "title"),
-    [filteredData]
-  );
-
   const processDataForTabs = (data) => {
     const allTab = {
       key: "all",
@@ -175,7 +160,6 @@ const Settings = () => {
 
     const statusCounts = data.reduce((acc, item) => {
       const statusKey = item.status;
-      // acc[statusKey] = (acc[statusKey] || 0) + 1;
 
       if (!acc[statusKey]) {
         acc[statusKey] = {
@@ -203,59 +187,111 @@ const Settings = () => {
   };
 
   return (
-    <Layout style={{ background: "#001529" }}>
-      <HeaderTop />
-      <Content
-        style={{ padding: "0", minHeight: "100vh" }}
-        className="right-side"
-      >
-        <div
+    <>
+      <Flex style={{ flexDirection: "row", gap: "1rem" }}>
+        <Box
+          radius={15}
+          className="box"
           style={{
-            display: "flex",
-            gap: "1rem",
+            maxWidth: "100%",
+            flex: "1",
+            height: "100%",
+            background: "#fff",
           }}
         >
-          <Flex style={{ flexDirection: "column", flex: "0 0 75%" }}>
-            {/*  */}
-            <Outlet />
-            {/* // */}
-          </Flex>
-
-          {/* Right side: usr info, calendar */}
-          <div
-            style={{
-              display: "flex",
-              gap: "10px",
-              flexDirection: "column",
-              maxWidth: "25rem",
-              width: "100%",
-            }}
-          >
-            <Box radius={15} className="box profile">
-              <Avatar size={64} icon={<UserOutlined />} />
-              <h2>Hong gildong</h2>
-              <p>Dev / Manager</p>
-              <Flex
-                style={{ justifyContent: "center", margin: "1.4rem 0 2rem" }}
-              >
-                <Button type="default" style={{ marginRight: "10px" }}>
-                  Todos
-                </Button>
-                <Button type="primary" style={{ marginRight: "10px" }}>
-                  Logout
-                </Button>
-              </Flex>
-            </Box>{" "}
-            <Box radius={15} className="box" style={{ height: "100%" }}>
-              <h3>달력</h3>
-              <Calendar />
+          <div className="summ-wrap main" style={{ display: "flex" }}>
+            <Box className="tit" radius={15} widthh={130}>
+              <p className="txt">오늘 매출</p>
+              <p className="num">1개</p>
+            </Box>
+            <Box className="tit" radius={15} widthh={130}>
+              <p className="txt">주문 건수</p>
+              <p className="num">1개</p>
+            </Box>
+            <Box className="tit" radius={15} widthh={130}>
+              <p className="txt">품절상품 수</p>
+              <p className="num">1개</p>
             </Box>
           </div>
-          {/* // */}
-        </div>
-      </Content>
-    </Layout>
+          <Box className="box summary">
+            {/* <GraphDashboard
+                    tabData={tabButtons}
+                    activeKey={sum}
+                    onTabChange={clicksumNum}
+                    activeContent={tabButtons.find((item) => item.key === sum)}
+                  /> */}
+            {tableData.length > 0 ? (
+              <GraphDashboard
+                activeKey={activeKey}
+                activeDetailData={tableData}
+              />
+            ) : (
+              <div>데이터를 로드 중입니다...</div>
+            )}
+          </Box>{" "}
+        </Box>
+
+        {/* <Box
+                radius={15}
+                className="box"
+                style={{ maxWidth: "100%", flex: "1", height: "100%" }}
+              >
+                <h2>입출고 추이</h2>
+
+                <Box className="box summary">
+                  <TabsSummary
+                    tabData={tabButtons}
+                    activeKey={sum}
+                    onTabChange={clicksumNum}
+                    activeContent={tabButtons.find((item) => item.key === sum)}
+                  />
+                </Box>
+              </Box> */}
+      </Flex>
+
+      <div className="main-cs-msg-wrap">
+        <Box radius={15} className="box cs-msg-summary">
+          <Flex style={{ justifyContent: "flex-start", alignItems: "center" }}>
+            <h2 className="tit">메일 문의</h2>
+            <Button type="link">더보기</Button>
+          </Flex>
+          <ul className="main-mailbox">
+            {dummyMail.received.map((mail, index) => {
+              return (
+                <>
+                  <li key={index} className="mail-sect">
+                    <span>{mail.date}</span>
+                    <span>{mail.author}</span>
+                    <span className="mail-desc">{mail.desc}</span>
+                  </li>
+                </>
+              );
+            })}
+          </ul>
+        </Box>
+
+        <Box radius={15} className="box cs-msg-summary">
+          <Flex style={{ justifyContent: "flex-start", alignItems: "center" }}>
+            <h2 className="tit">게시판 문의</h2>
+            <Button type="link">더보기</Button>
+          </Flex>
+          <ul className="main-mailbox">
+            {dummyMail.received.map((mail, index) => {
+              return (
+                <>
+                  <li key={index} className="mail-sect">
+                    <span>{mail.date}</span>
+                    <span>{mail.author}</span>
+                    <span className="mail-desc">{mail.desc}</span>
+                  </li>
+                </>
+              );
+            })}
+          </ul>
+        </Box>
+      </div>
+    </>
   );
 };
 
-export default Settings;
+export default First;

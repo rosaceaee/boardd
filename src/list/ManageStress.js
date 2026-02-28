@@ -232,7 +232,7 @@ const ExAntd = () => {
   });
 
   return (
-    <Layout>
+    <Layout style={{ padding: "1rem", borderRadius: "1rem" }}>
       {/* <Sider width={200} trigger={null} collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
         <Menu items={items} mode="inline" theme="dark" onClick={(a) => a} />
       </Sider>       */}

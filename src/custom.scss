@@ -7,6 +7,15 @@ $ccc: #cccccc;
   background: #79ae92;
 }
 
+.headerTop {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding: 1rem 10rem 1rem 1rem;
+  gap: 2rem;
+}
+
 .wrapp {
   min-height: 100vh;
   padding: 0;
@@ -19,6 +28,12 @@ $ccc: #cccccc;
   margin: 0 !important;
   background: #001529;
   padding: 1rem 4rem;
+}
+
+.main-cs-msg-wrap {
+  display: flex;
+  gap: 1rem;
+  flex: 1;
 }
 
 // component - box
@@ -51,6 +66,7 @@ $ccc: #cccccc;
     display: flex;
     flex-direction: column;
     gap: 0.4rem;
+    width: 100%;
     .tit {
       text-align: left;
     }
