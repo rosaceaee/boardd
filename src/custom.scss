@@ -330,10 +330,12 @@ $ccc: #cccccc;
       gap: 3px;
 
       .desc {
-        margin-bottom: 0.6rem;
+        margin-bottom: 1rem;
+        display: flex;
+        flex-direction: column;
       }
       .note {
-        font-size: 0.7rem;
+        font-size: 0.8999rem;
         font-weight: 500;
       }
 
@@ -346,12 +348,12 @@ $ccc: #cccccc;
       }
     }
     .desc {
-      font-size: 1rem;
+      font-size: 1.2rem;
       font-weight: 600;
       text-align: center;
     }
     .note {
-      font-size: 0.7rem;
+      font-size: 0.8rem;
       font-weight: 500;
     }
   }

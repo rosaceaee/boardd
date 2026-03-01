@@ -1,5 +1,11 @@
 import React, { useState, useEffect, useReducer, useMemo } from "react";
-import { SearchOutlined, InfoCircleTwoTone } from "@ant-design/icons";
+import {
+  SearchOutlined,
+  InfoCircleTwoTone,
+  QuestionCircleOutlined,
+  CloseCircleOutlined,
+  CheckCircleOutlined,
+} from "@ant-design/icons";
 import {
   Layout,
   Row,
@@ -16,7 +22,6 @@ import {
   InputNumber,
   Popover,
 } from "antd";
-import { FormProvider } from "rc-field-form";
 import { dummyZaikoApi, DATA_FILTERS } from "../manage/dummyZaikoApi";
 import { inventoryApi } from "../api/inventoryApi";
 import AddZaiko from "./AddZaiko";
@@ -147,11 +152,32 @@ const Instock = ({ onApplySuccess, selectedCategory }) => {
                 }}
                 content={
                   <div className="step-wrap">
+                    {step < 3 ? (
+                      <QuestionCircleOutlined
+                        style={{
+                          fontSize: "2.4rem",
+                          margin: "1rem auto 0",
+                          textAlign: "center",
+                          color: "#FFB300",
+                          display: "block",
+                        }}
+                      />
+                    ) : (
+                      <CheckCircleOutlined
+                        style={{
+                          fontSize: "2.4rem",
+                          margin: "1rem auto 0",
+                          textAlign: "center",
+                          color: "#5CC9BC",
+                          display: "block",
+                        }}
+                      />
+                    )}
+
                     {step === 1 && (
                       <div className="inner step1">
                         <span className="desc">
                           재고가 부족합니다. 몇 개 신청할까요?
-                          <br />
                           <span className="note">
                             숫자를 입력하거나 증감 버튼으로 조절
                           </span>
