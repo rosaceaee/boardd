@@ -1,20 +1,6 @@
 import React, { useState, useEffect, useReducer, useMemo } from "react";
 import { dummyMail, MailData } from "./MailData";
-import {
-  Layout,
-  Row,
-  Col,
-  Menu,
-  Table,
-  Input,
-  Button,
-  Modal,
-  Space,
-  Dropdown,
-  Flex,
-  Tabs,
-  TextArea,
-} from "antd";
+import { Table, Input, Button, Modal, Flex } from "antd";
 
 const Mail = () => {
   const [open, setOpen] = useState(false);
@@ -60,9 +46,9 @@ const Mail = () => {
           return {
             onClick: () => {
               setDetail(record); // 클릭한 행의 데이터 저장
-              setOpen(true); // 모달 열기
+              setOpen(true);
             },
-            style: { cursor: "pointer" }, // 클릭 가능하다는 표시
+            style: { cursor: "pointer" },
           };
         }}
       />
@@ -119,7 +105,7 @@ const Mail = () => {
           <div className="reply-wrap">
             <Input.TextArea
               rows={4}
-              placeholder="답장 내용을 입력ㄱ"
+              placeholder="답장 내용을 입력해주세요."
               value={replyContent}
               onChange={(e) => setReplyContent(e.target.value)}
             />

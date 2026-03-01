@@ -1,34 +1,6 @@
 import React, { useState, useEffect, useReducer, useMemo } from "react";
-import Box from "../compo/Box.tsx";
-import CircleBox from "../compo/CircleBox.tsx";
-import RequestStock from "../compo/RequestStock";
-import GraphDashboard from "../compo/GraphDashboard";
-
-// import { DATA_FILTERS } from "../manage/stockData";
-import { dummyZaikoApi, DATA_FILTERS } from "../manage/dummyZaikoApi";
-
-import { SearchOutlined, InfoCircleTwoTone } from "@ant-design/icons";
-import {
-  Layout,
-  Row,
-  Col,
-  Menu,
-  Table,
-  Input,
-  Button,
-  Modal,
-  Space,
-  Dropdown,
-  Flex,
-  Tabs,
-  Avatar,
-  Card,
-  Calendar,
-} from "antd";
+import { Layout, Button, Flex, Avatar, Calendar } from "antd";
 import { UserOutlined } from "@ant-design/icons";
-
-import { dummyMail } from "./dummyMail.js";
-
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -38,6 +10,13 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
+
+import { dummyMail } from "./dummyMail.js";
+
+import Box from "../compo/Box.tsx";
+import GraphDashboard from "../compo/GraphDashboard";
+// import { DATA_FILTERS } from "../manage/stockData";
+import { dummyZaikoApi, DATA_FILTERS } from "../manage/dummyZaikoApi";
 
 ChartJS.register(
   CategoryScale,
@@ -96,10 +75,7 @@ const columns = [
 ];
 
 const Settings = () => {
-  const [chkDeleteModal, setChkDeleteModal] = useState(false);
   const [searchKeyword, setSearchKeyword] = useState("");
-
-  const [selectedRow, setSelectedRow] = useState(null);
   const [cellData, dispatch] = useReducer(reducer, initialState);
   const [filteredData, setFilteredData] = useState([]);
 
@@ -107,6 +83,8 @@ const Settings = () => {
   const [tableData, setTableData] = useState([]);
 
   const [activeKey, setActiveKey] = useState(DATA_FILTERS.perfume);
+
+  const { Sider, Header, Content, Footer } = Layout;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -160,36 +138,6 @@ const Settings = () => {
       setFilteredData(cellData);
     }
   }, [searchKeyword, cellData]);
-
-  const searchData = () => {
-    const keyword = searchKeyword.toLowerCase().trim();
-
-    if (keyword === "") {
-      setFilteredData(cellData);
-      return;
-    }
-
-    const filtered = cellData.filter(
-      (item) =>
-        item.title.toLowerCase().includes(keyword) ||
-        item.fir.toString().includes(keyword) ||
-        item.scnd.toString().includes(keyword)
-    );
-
-    setFilteredData(filtered);
-  };
-
-  const { Sider, Header, Content, Footer } = Layout;
-
-  // 차트 데이터 생성 labelKey-> "title"
-  const chartData = useMemo(
-    () => generateChartData(columns, filteredData, "title"),
-    [filteredData]
-  );
-
-  const clicksumNum = (key) => {
-    setSum(key);
-  };
 
   const processDataForTabs = (data) => {
     const allTab = {

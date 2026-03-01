@@ -16,9 +16,7 @@ import {
   InputNumber,
   Popover,
 } from "antd";
-import { FormProvider } from "rc-field-form";
 import { dummyZaikoApi, DATA_FILTERS } from "../manage/dummyZaikoApi";
-import { inventoryApi } from "../api/inventoryApi";
 import AddZaiko from "./AddZaiko";
 
 const initialState = [];
