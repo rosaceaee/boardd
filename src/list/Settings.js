@@ -44,10 +44,7 @@ import {
 
 import { dummyMail } from "./dummyMail.js";
 
-import Box from "../compo/Box.tsx";
-import GraphDashboard from "../compo/GraphDashboard";
 // import { DATA_FILTERS } from "../manage/stockData";
-import { dummyZaikoApi, DATA_FILTERS } from "../manage/dummyZaikoApi";
 
 ChartJS.register(
   CategoryScale,
@@ -115,8 +112,6 @@ const Settings = () => {
   const [tableData, setTableData] = useState([]);
 
   const [activeKey, setActiveKey] = useState(DATA_FILTERS.perfume);
-
-  const { Sider, Header, Content, Footer } = Layout;
 
   useEffect(() => {
     const fetchData = async () => {
