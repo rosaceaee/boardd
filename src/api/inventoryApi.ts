@@ -1,3 +1,5 @@
+// 나중에 supabase같은 백엔드쪽 확장할 때 사용 예정.
+
 import api from "./axiosInstance";
 
 export interface StockRequestParams {
