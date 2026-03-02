@@ -1,4 +1,3 @@
-import logo from "./logo.svg";
 import React, { useState, useEffect } from "react";
 
 import {
@@ -14,6 +13,7 @@ import {
   InfoCircleTwoTone,
   QuestionCircleOutlined,
   CloseCircleOutlined,
+  MessageTwoTone,
 } from "@ant-design/icons";
 import {
   Layout,
@@ -48,7 +48,7 @@ import NewChat from "./compo/NewChat";
 import CsTemp from "./cs/CsTemp";
 import Mail from "./cs/Mail";
 import BoardCs from "./cs/BoardCs";
-
+import First from "./list/First";
 // App.js
 
 import {
@@ -128,6 +128,7 @@ const FixedLayout = () => {
             margin: "10px 1rem",
             minHeight: "calc(100vh - 48px)",
             overflowY: "auto",
+            padding: "2rem",
           }}
         >
           <Outlet />
@@ -171,7 +172,7 @@ function App() {
     <div className="App">
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<FixedLayout />}>
+          {/* <Route path="/" element={<FixedLayout />}>
             <Route index element={<Settings />} />
 
             <Route path="stress" element={<ManageStress />} />
@@ -181,7 +182,6 @@ function App() {
             <Route path="settings/*" element={<Settings />} />
             <Route path="usrpage/*" element={<UserPage />} />
             <Route path="sellmanage" element={<SellManage />} />
-            {/* <Route path="mail" element={<Mail />} /> */}
             <Route path="boardcs" element={<BoardCs />} />
 
             <Route path="/sellManage" element={<SellManage />}>
@@ -192,11 +192,25 @@ function App() {
               </Route>
             </Route>
             <Route path="*" element={<div>404 Page Not Found</div>}></Route>
+          </Route> */}
+          <Route path="/" element={<FixedLayout />}>
+            <Route path="/" element={<Settings />}>
+              <Route index element={<First />} />
+              <Route path="stress" element={<ManageStress />} />
+              <Route path="boardcs" element={<BoardCs />} />
+              <Route path="/sellManage" element={<SellManage />}>
+                <Route element={<CsTemp />}>
+                  <Route index element={<Mail />} />
+                  <Route path="mail" element={<Mail />} />
+                  <Route path="boardCs" element={<BoardCs />} />
+                </Route>
+              </Route>
+            </Route>
           </Route>
         </Routes>
       </BrowserRouter>
 
-      <QuestionCircleOutlined
+      <MessageTwoTone
         style={{
           position: "fixed",
           right: "1rem",

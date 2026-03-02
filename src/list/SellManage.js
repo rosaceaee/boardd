@@ -57,13 +57,13 @@ const SellManage = () => {
   }));
 
   return (
-    <Layout>
+    <Layout style={{ borderRadius: "1rem" }}>
       <Tabs
         tabPosition={tabPosition}
         activeKey={activeKey}
         items={tabItems}
         onChange={handleTabChange}
-        style={{ height: "100vh" }}
+        style={{ height: "100vh", padding: "1rem" }}
       />
     </Layout>
   );
