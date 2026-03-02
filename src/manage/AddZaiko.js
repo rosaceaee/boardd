@@ -1,25 +1,5 @@
 import React, { useState, useEffect, useReducer, useMemo } from "react";
-import {
-  Layout,
-  Row,
-  Col,
-  Menu,
-  Table,
-  Input,
-  Button,
-  Modal,
-  Space,
-  Dropdown,
-  Flex,
-  Tabs,
-  InputNumber,
-  Popover,
-  Form,
-  Radio,
-  Select,
-  TreeSelect,
-  Cascader,
-} from "antd";
+import { Modal, InputNumber, Form, TreeSelect } from "antd";
 import Box from "../compo/Box";
 // open={open}
 // onApplySuccess={onApplySuccess}

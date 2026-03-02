@@ -11,23 +11,6 @@ import {
   Legend,
   Filler,
 } from "chart.js";
-import {
-  Layout,
-  Row,
-  Col,
-  Menu,
-  Table,
-  Input,
-  Button,
-  Modal,
-  Space,
-  Dropdown,
-  Flex,
-  Tabs,
-  Avatar,
-  Card,
-  Calendar,
-} from "antd";
 ChartJS.register(
   CategoryScale,
   LinearScale,

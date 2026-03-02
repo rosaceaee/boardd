@@ -13,6 +13,7 @@ import {
   InfoCircleTwoTone,
   QuestionCircleOutlined,
   CloseCircleOutlined,
+  MessageTwoTone,
 } from "@ant-design/icons";
 import {
   Layout,
@@ -209,7 +210,7 @@ function App() {
         </Routes>
       </BrowserRouter>
 
-      <QuestionCircleOutlined
+      <MessageTwoTone
         style={{
           position: "fixed",
           right: "1rem",

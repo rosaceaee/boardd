@@ -6,24 +6,8 @@ import ListStock from "../list/ListStock";
 import Order from "../sell/Order";
 
 import { SearchOutlined, InfoCircleTwoTone } from "@ant-design/icons";
-import {
-  Layout,
-  Row,
-  Col,
-  Menu,
-  Table,
-  Input,
-  Button,
-  Modal,
-  Space,
-  Dropdown,
-  Flex,
-  Tabs,
-} from "antd";
+import { Layout, Dropdown, Tabs } from "antd";
 
-import { useNavigate } from "react-router-dom";
-
-import { Bar } from "react-chartjs-2";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -91,7 +75,7 @@ const columns = [
   },
 ];
 
-const ExAntd = () => {
+const ManageStress = () => {
   const [chkDeleteModal, setChkDeleteModal] = useState(false);
   const [selectedRow, setSelectedRow] = useState(null);
   const [searchKeyword, setSearchKeyword] = useState("");
@@ -115,61 +99,6 @@ const ExAntd = () => {
     }
   }, [searchKeyword, cellData]);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setInput((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const addRow = () => {
-    if (input.title && input.fir && input.scnd) {
-      dispatch({
-        type: "add",
-        payload: {
-          title: input.title,
-          fir: Number(input.fir),
-          scnd: Number(input.scnd),
-        },
-      });
-      setInput({ title: "", fir: "", scnd: "" });
-    } else {
-      alert("값을 모두 입력해주세요.");
-    }
-  };
-
-  const deleteRow = (index) => {
-    setSelectedRow({ ...cellData[index], index });
-    setChkDeleteModal(true);
-  };
-
-  const confirmDelete = () => {
-    dispatch({ type: "delete", index: selectedRow.index });
-    setChkDeleteModal(false);
-    setSelectedRow(null);
-  };
-
-  const cancelDelete = () => {
-    setChkDeleteModal(false);
-    setSelectedRow(null);
-  };
-
-  const searchData = () => {
-    const keyword = searchKeyword.toLowerCase().trim();
-
-    if (keyword === "") {
-      setFilteredData(cellData);
-      return;
-    }
-
-    const filtered = cellData.filter(
-      (item) =>
-        item.title.toLowerCase().includes(keyword) ||
-        item.fir.toString().includes(keyword) ||
-        item.scnd.toString().includes(keyword)
-    );
-
-    setFilteredData(filtered);
-  };
-
   const { Sider, Header, Content, Footer } = Layout;
 
   // 차트 데이터 생성 labelKey-> "title"
@@ -182,7 +111,6 @@ const ExAntd = () => {
     { key: "1", label: "summary" },
     {
       key: "/stress",
-
       label: "ManageStress",
     },
     {
@@ -195,9 +123,6 @@ const ExAntd = () => {
     },
   ];
 
-  const changeTabPosition = (e) => {
-    setTabPosition(e.target.value);
-  };
   const items2 = [
     { key: "/requestStock", label: "입/출고 등록" },
     { key: "/orderManage", label: "주문배송관리" },
@@ -256,4 +181,4 @@ const ExAntd = () => {
   );
 };
 
-export default ExAntd;
+export default ManageStress;

@@ -24,6 +24,9 @@ const SellManage = () => {
   const [cellData, dispatch] = useReducer(reducer, initialState);
   const [filteredData, setFilteredData] = useState([]);
 
+  const navigate = useNavigate();
+  const location = useLocation();
+
   useEffect(() => {
     setFilteredData(cellData);
   }, [cellData]);
@@ -33,9 +36,6 @@ const SellManage = () => {
       setFilteredData(cellData);
     }
   }, [searchKeyword, cellData]);
-
-  const navigate = useNavigate();
-  const location = useLocation();
 
   const activeKey = location.pathname.includes("boardCs")
     ? "/sellManage/boardCs"
