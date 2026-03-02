@@ -17,9 +17,7 @@ import {
   Flex,
   Tabs,
 } from "antd";
-import Box from "../compo/Box.tsx";
 
-import { Bar } from "react-chartjs-2";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -63,11 +61,9 @@ const ListStock = () => {
 
   const fetchData = async (key) => {
     setIsLoading(true);
-    // 🚨 key 값에 따라 다른 API를 호출하거나, 단일 API에 key를 필터로 전달
     const status = key === "1" ? "perfume" : key === "2" ? "body" : "candle";
 
     try {
-      // dummyStockApi는 상태(status)를 인수로 받는다고 가정
       const data = await dummyStockApi(status);
       setTableData(data);
     } catch (error) {
@@ -78,9 +74,8 @@ const ListStock = () => {
   };
   useEffect(() => {
     fetchData(activeTabKey);
-  }, [activeTabKey]); // 🚨 activeTabKey가 변경될 때마다 useEffect 재실행
+  }, [activeTabKey]);
 
-  // 4. 📝 탭 변경 핸들러
   const handleTabChange = (key) => {
     setActiveTabKey(key);
     // setTableData([]); // 데이터를 비우고 로딩을 시작할 수도 있음
@@ -137,8 +132,6 @@ const ListStock = () => {
     },
   ];
 
-  const { Sider, Header, Content, Footer } = Layout;
-
   return (
     <>
       <section style={{ minHeight: "100vh" }}>
@@ -148,7 +141,6 @@ const ListStock = () => {
           onChange={handleTabChange}
         />
 
-        {/* 🚨 공통 Table에 데이터 및 로딩 상태 연결 */}
         <Table dataSource={tableData} columns={columns} loading={isLoading} />
       </section>
     </>

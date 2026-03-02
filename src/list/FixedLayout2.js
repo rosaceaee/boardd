@@ -180,7 +180,6 @@ const FixedLayout2 = () => {
     { key: "1", label: "summary" },
     {
       key: "/stress",
-
       label: "ManageStress",
     },
     {

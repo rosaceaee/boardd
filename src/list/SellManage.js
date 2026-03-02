@@ -1,29 +1,6 @@
 import React, { useState, useEffect, useReducer, useMemo } from "react";
-import { Outlet, Link, useLocation } from "react-router-dom";
-
-import ReportSell from "../sell/ReportSell";
-import ManageMarketing from "../sell/ManageMarketing";
-import ManageShipping from "../sell/ManageShipping";
-import CsTemp from "../cs/CsTemp";
-import BoardCs from "../cs/BoardCs";
-
-import { SearchOutlined, InfoCircleTwoTone } from "@ant-design/icons";
-import {
-  Layout,
-  Row,
-  Col,
-  Menu,
-  Table,
-  Input,
-  Button,
-  Modal,
-  Space,
-  Dropdown,
-  Flex,
-  Tabs,
-} from "antd";
-
-import { useNavigate } from "react-router-dom";
+import { Outlet, useNavigate, Link, useLocation } from "react-router-dom";
+import { Layout, Tabs } from "antd";
 
 const initialState = [];
 
@@ -44,6 +21,9 @@ const SellManage = () => {
   const [cellData, dispatch] = useReducer(reducer, initialState);
   const [filteredData, setFilteredData] = useState([]);
 
+  const navigate = useNavigate();
+  const location = useLocation();
+
   useEffect(() => {
     setFilteredData(cellData);
   }, [cellData]);
@@ -53,9 +33,6 @@ const SellManage = () => {
       setFilteredData(cellData);
     }
   }, [searchKeyword, cellData]);
-
-  const navigate = useNavigate();
-  const location = useLocation();
 
   const activeKey = location.pathname.includes("boardCs")
     ? "/sellManage/boardCs"

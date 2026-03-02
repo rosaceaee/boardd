@@ -59,17 +59,6 @@ const Outstock = ({ data }) => {
     setFilteredData(cellData);
   }, [cellData]);
 
-  useEffect(() => {
-    if (searchKeyword.trim() === "") {
-      setFilteredData(cellData);
-    }
-  }, [searchKeyword, cellData]);
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setInput((prev) => ({ ...prev, [name]: value }));
-  };
-
   const columns = [
     { title: "신청일시", dataIndex: "date", key: "date", width: "20%" },
     { title: "상품명", dataIndex: "name", key: "name" },

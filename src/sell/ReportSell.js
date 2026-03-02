@@ -1,27 +1,10 @@
 import React, { useState, useEffect, useReducer, useMemo } from "react";
 import { SearchOutlined, InfoCircleTwoTone } from "@ant-design/icons";
-import {
-  Layout,
-  Row,
-  Col,
-  Menu,
-  Table,
-  Input,
-  Button,
-  Modal,
-  Space,
-  Dropdown,
-  Flex,
-  Tabs,
-} from "antd";
+import { Table } from "antd";
 import Box from "../compo/Box.tsx";
 
 const ReportSell = () => {
-  const [chkDeleteModal, setChkDeleteModal] = useState(false);
-  const [selectedRow, setSelectedRow] = useState(null);
-  const [searchKeyword, setSearchKeyword] = useState("");
   const [filteredData, setFilteredData] = useState([]);
-  const [tabPosition, setTabPosition] = useState("left");
 
   const columns = [
     { title: "범례", dataIndex: "title", key: "title" },

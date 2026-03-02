@@ -23,7 +23,6 @@ import {
   Popover,
 } from "antd";
 import { dummyZaikoApi, DATA_FILTERS } from "../manage/dummyZaikoApi";
-import { inventoryApi } from "../api/inventoryApi";
 import AddZaiko from "./AddZaiko";
 
 const initialState = [];
