@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useReducer, useMemo } from "react";
 import Box from "../compo/Box.tsx";
-import HeaderTop from "../compo/HeaderTop";
+import HeaderTop from "../compo/HeaderTop.js";
 import {
   BrowserRouter,
   Routes,
@@ -11,7 +11,7 @@ import {
 } from "react-router-dom";
 
 // import { DATA_FILTERS } from "../manage/stockData";
-import { dummyZaikoApi, DATA_FILTERS } from "../manage/dummyZaikoApi";
+import { dummyZaikoApi, DATA_FILTERS } from "../manage/dummyZaikoApi.js";
 
 import {
   Layout,

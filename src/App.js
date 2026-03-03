@@ -35,7 +35,7 @@ import {
 
 import "./App.css";
 import "./custom.scss";
-import Settings from "./list/Settings";
+import ContentWrapper from "./list/ContentWrapper.js";
 import UserPage from "./list/UserPage";
 import ManageStress from "./list/ManageStress";
 import RequestStock from "./compo/RequestStock";
@@ -67,7 +67,7 @@ const SidebarMenu = () => {
 
   const items = [
     { key: "/", icon: <BarChartOutlined />, label: "summary" },
-    { key: "/stress", icon: <FileTextOutlined />, label: "재고관리" },
+    { key: "/manageAllStock", icon: <FileTextOutlined />, label: "재고관리" },
     { key: "/sellManage", icon: <UserOutlined />, label: "고객관리" },
     { key: "/usrpage", icon: <UserOutlined />, label: "User Page (중첩)" },
   ];
@@ -194,9 +194,9 @@ function App() {
             <Route path="*" element={<div>404 Page Not Found</div>}></Route>
           </Route> */}
           <Route path="/" element={<FixedLayout />}>
-            <Route path="/" element={<Settings />}>
+            <Route path="/" element={<ContentWrapper />}>
               <Route index element={<First />} />
-              <Route path="stress" element={<ManageStress />} />
+              <Route path="manageAllStock" element={<ManageStress />} />
               <Route path="boardcs" element={<BoardCs />} />
               <Route path="/sellManage" element={<SellManage />}>
                 <Route element={<CsTemp />}>

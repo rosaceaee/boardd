@@ -110,7 +110,7 @@ const ManageStress = () => {
   const items = [
     { key: "1", label: "summary" },
     {
-      key: "/stress",
+      key: "/manageAllStock",
       label: "ManageStress",
     },
     {
