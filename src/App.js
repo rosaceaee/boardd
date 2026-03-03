@@ -14,6 +14,7 @@ import {
   QuestionCircleOutlined,
   CloseCircleOutlined,
   MessageTwoTone,
+  StopTwoTone,
 } from "@ant-design/icons";
 import {
   Layout,
@@ -206,6 +207,21 @@ function App() {
                 </Route>
               </Route>
             </Route>
+            <Route
+              path="*"
+              element={
+                <div className="box notfound">
+                  <StopTwoTone
+                    style={{ fontSize: "4rem", marginBottom: "2rem" }}
+                  />{" "}
+                  <br />
+                  <p style={{ color: "#fff", fontSize: "2rem" }}>NOT FOUND</p>
+                  <p style={{ color: "#fff", fontSize: "2rem" }}>
+                    페이지를 찾을 수 없습니다.
+                  </p>
+                </div>
+              }
+            ></Route>
           </Route>
         </Routes>
       </BrowserRouter>
