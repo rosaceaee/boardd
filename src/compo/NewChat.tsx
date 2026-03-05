@@ -8,6 +8,7 @@ import {
 } from "@ant-design/icons";
 import { Avatar, Form, Input, Button, Select } from "antd";
 import Box from "./Box";
+import BoxVulChk from "./BoxVulChk";
 
 interface dataTypes {
   setOpen: boolean;
@@ -99,6 +100,18 @@ const NewChat = ({ title, options, onClose, children }: dataTypes) => {
                 >
                   <p>{msg.text}</p>
                 </Box>
+
+                {/* 
+                1: <img src="x" onerror="alert('이미지 XSS 성공!')">
+                2: <script>alert('XSS 성공!')</script>
+                3: <img src=x onerror=alert(1)/>
+                */}
+                {/* <BoxVulChk className="vul-box">{msg.text}</BoxVulChk> */}
+
+                <div
+                  className="vul-box"
+                  dangerouslySetInnerHTML={{ __html: msg.text }}
+                />
               </div>
             ))}
 
