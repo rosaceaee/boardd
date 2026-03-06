@@ -49,6 +49,8 @@ import CsTemp from "./cs/CsTemp";
 import Mail from "./cs/Mail";
 import BoardCs from "./cs/BoardCs";
 import First from "./list/First";
+import Login from "./list/Login";
+
 // App.js
 
 import {
@@ -193,6 +195,7 @@ function App() {
             </Route>
             <Route path="*" element={<div>404 Page Not Found</div>}></Route>
           </Route> */}
+          <Route path="/login" element={<Login />} />
           <Route path="/" element={<FixedLayout />}>
             <Route path="/" element={<Settings />}>
               <Route index element={<First />} />

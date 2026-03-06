@@ -2,10 +2,55 @@ $drkgrn: #79ae92;
 $lggrn: #8aae9b;
 $fff: #ffffff;
 $ccc: #cccccc;
+$taupeGray: #5d576b;
 
 @mixin bg-drkgrn {
   background: #79ae92;
 }
+
+// login
+.login-wrap {
+  width: 100%;
+  height: calc(100vh - 1.3rem);
+  background: $taupeGray;
+  display: flex;
+  flex: 1;
+
+  .side {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    &.left {
+      flex-grow: 2;
+      position: relative;
+      &:after {
+        content: "";
+        width: 1px;
+        height: calc(100vh - 3rem);
+        position: absolute;
+        right: 1rem;
+        top: 1rem;
+        background: $ccc;
+      }
+    }
+
+    &.right {
+      flex-grow: 2;
+      display: flex;
+      justify-content: center;
+
+      label {
+        color: #fff;
+      }
+    }
+  }
+
+  .tit {
+    margin: 1rem 0;
+    color: #fff;
+  }
+}
+//
 
 .headerTop {
   display: flex;
